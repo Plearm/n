@@ -49,7 +49,7 @@
 	  <textarea name = "bio-field"> </textarea>
 	</label> <br/>
 	<label>
-	  <input type = "checkbox" name = "checkbox"> I agree with the contract </label> <br/>
+	  <input type = "checkbox" name = "checkbox" /> </label> <br/>
 	  Send: <br/>
 	  <input type="submit" value="Sending" />
   </form>
