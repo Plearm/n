@@ -1,80 +1,96 @@
 <?php
-// Отправляем браузеру правильную кодировку,
-// файл index.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
-
-// В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
-// и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  // В суперглобальном массиве $_GET PHP хранит все параметры, переданные в текущем запросе через URL.
-  if (!empty($_GET['save'])) {
-    // Если есть параметр save, то выводим сообщение пользователю.
-    print('Спасибо, результаты сохранены.');
-  }
-  // Включаем содержимое файла form.php.
-  include('form.php');
-  // Завершаем работу скрипта.
-  exit();
+if ($_SERVER['REQUEST_METHOD'] != 'POST'){
+	print_r('Does not accept non POST methods');
 }
-// Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в XML-файл.
-
-// Проверяем ошибки.
 $errors = FALSE;
-if (empty($_POST['fio'])) {
-  print('Заполните имя.<br/>');
-  $errors = TRUE;
+if(empty($_POST['field-name-1']) || !isset($_POST['field-name-4']) || empty($_POST['field-email']) || empty($_POST['field-date']) || empty($_POST['bio-field']) || empty($_POST['checkbox']) || $_POST['checkbox'] == false){
+	print_r('Empty fields!');
+	exit();
 }
-
-if (empty($_POST['year']) || !is_numeric($_POST['year']) || !preg_match('/^\d+$/', $_POST['year'])) {
-  print('Заполните год.<br/>');
-  $errors = TRUE;
+if(!is_numeric($_POST['radio-group-2'])){
+	print_r('Limb field is non-numeric');
 }
-
-
-// *************
-// Тут необходимо проверить правильность заполнения всех остальных полей.
-// *************
-
-if ($errors) {
-  // При наличии ошибок завершаем работу скрипта.
-  exit();
+print_r("Non null data... <br/>");
+$name = $_POST['field-name-1'];
+$email = $_POST['field-email'];
+$birth = $_POST['field-date'];
+$sex = $_POST['radio-group-1'];
+$limbs = intval($_POST['radio-group-2']);
+$superpowers = $_POST['field-name-4'];
+$bio= $_POST['bio-field'];
+$bioregex = "/^\s*\w+[\w\s\.,-]*$/";
+$regex = "/^\w+[\w\s-]*$/";
+$dateregex = "/^\d{4}-\d{2}-\d{2}$/";
+$mailregex = "/^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$/";
+$super_list = array('immortality','walkthroughwalls','levitation');
+if(!preg_match($regex,$name)){
+	print_r('Invalid name format');
+	exit();
 }
-
-// Сохранение в базу данных.
-
-$user = 'u52830'; // Заменить на ваш логин uXXXXX
-$pass = '7841698'; // Заменить на пароль, такой же, как от SSH
-$db = new PDO('mysql:host=localhost;dbname=u52830', $user, $pass,
-  [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); // Заменить test на имя БД, совпадает с логином uXXXXX
-
-// Подготовленный запрос. Не именованные метки.
+if($limbs < 1 || $limbs > 5){
+	print_r('Invalid am of limbs');
+	exit();
+}
+if(!preg_match($dateregex,$birth)){
+	print_r('Invalid birth format');
+	exit();
+}
+preg_match_all("/\d+/",$birth,$matches);
+if (!checkdate($matches[0][1],$matches[0][2],$matches[0][0])){
+	print_r('Date does not exist');
+	exit();
+}
+if(!preg_match($bioregex,$bio)){
+	print_r('Invalid bio format');
+	exit();
+}
+if(!preg_match($mailregex,$email)){
+	print_r('Invalid email format');
+	exit();
+}
+if($sex !== 'male' && $sex !== 'female'){
+	print_r('Invalid sex format');
+	exit();
+}
+foreach($superpowers as $checking){
+	if(array_search($checking,$super_list)=== false){
+			print_r('Invalid superpower value!');
+			exit();
+	}
+}
+$user = 'u52830';
+$pass = '7841698';
+$db = new PDO('mysql:host=localhost;dbname=u52830', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
 try {
-  $stmt = $db->prepare("INSERT INTO application SET name = ?");
-  $stmt->execute([$_POST['fio']]);
-}
+  $stmt = $db->prepare("INSERT INTO bentex SET name=:name, email=:email, birthdate=:birthdate, sex=:sex, limb_count=:limbs, bio=:bio");
+  $stmt->bindParam(':name', $name);
+  $stmt->bindParam(':email', $email);
+  $stmt->bindParam(':birthdate', $birth);
+  $stmt->bindParam(':sex', $sex);
+  $stmt->bindParam(':limbs', $limbs);
+  $stmt->bindParam(':bio', $bio);
+  if($stmt->execute()==false){
+  print_r($stmt->errorCode());
+  print_r($stmt->errorInfo());
+  exit();
+  }
+  $id = $db->lastInsertId();
+  $sppe= $db->prepare("INSERT INTO superpowers SET name=:name, person_id=:person");
+  $sppe->bindParam(':person', $id);
+  foreach($superpowers as $inserting){
+	$sppe->bindParam(':name', $inserting);
+	if($sppe->execute()==false){
+	  print_r($sppe->errorCode());
+	  print_r($sppe->errorInfo());
+	  exit();
+	}
+  }
+} 
 catch(PDOException $e){
   print('Error : ' . $e->getMessage());
   exit();
 }
 
-//  stmt - это "дескриптор состояния".
- 
-//  Именованные метки.
-//$stmt = $db->prepare("INSERT INTO test (label,color) VALUES (:label,:color)");
-//$stmt -> execute(['label'=>'perfect', 'color'=>'green']);
- 
-//Еще вариант
-/*$stmt = $db->prepare("INSERT INTO users (firstname, lastname, email) VALUES (:firstname, :lastname, :email)");
-$stmt->bindParam(':firstname', $firstname);
-$stmt->bindParam(':lastname', $lastname);
-$stmt->bindParam(':email', $email);
-$firstname = "John";
-$lastname = "Smith";
-$email = "john@test.com";
-$stmt->execute();
-*/
-
-// Делаем перенаправление.
-// Если запись не сохраняется, но ошибок не видно, то можно закомментировать эту строку чтобы увидеть ошибку.
-// Если ошибок при этом не видно, то необходимо настроить параметр display_errors для PHP.
-header('Location: ?save=1');
+print_r("Succesfully added new stuff, probably...");
+?>
