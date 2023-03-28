@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
-if ($_SERVER['REQUEST_METHOD'] != 'GET'){
-	print_r('Does not accept non POST methods');
+if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 	if (!empty($_GET['save'])) {
     	// Если есть параметр save, то выводим сообщение пользователю.
    	 print('Спасибо, результаты сохранены.');
