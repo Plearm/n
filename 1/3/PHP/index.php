@@ -1,7 +1,14 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
-if ($_SERVER['REQUEST_METHOD'] != 'POST'){
+if ($_SERVER['REQUEST_METHOD'] != 'GET'){
 	print_r('Does not accept non POST methods');
+	if (!empty($_GET['save'])) {
+    	// Если есть параметр save, то выводим сообщение пользователю.
+   	 print('Спасибо, результаты сохранены.');
+  	}
+	include('form.php');
+  	// Завершаем работу скрипта.
+  	exit();
 }
 $errors = FALSE;
 if(empty($_POST['field-name-1']) || !isset($_POST['field-name-4']) || empty($_POST['field-email']) || empty($_POST['field-date']) || empty($_POST['bio-field']) || empty($_POST['checkbox']) || $_POST['checkbox'] == false){
