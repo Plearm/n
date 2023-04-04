@@ -83,6 +83,7 @@ try {
   }
   $id = $db->lastInsertId();
   $sppe= $db->prepare("INSERT INTO superpowers SET name=:name, person_id=:person");
+  $stmt->bindParam(':email', $email);
   $sppe->bindParam(':person', $id);
   foreach($superpowers as $inserting){
 	$sppe->bindParam(':name', $inserting);
