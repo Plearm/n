@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Задание 4</title>
+    <style>
+        /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
+        .error {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+<body>
 <?php
 if (!empty($messages)) {
     print('<div id="messages">');
