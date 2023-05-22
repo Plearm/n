@@ -13,8 +13,8 @@ header('Content-Type: text/html; charset=UTF-8');
 // Начинаем сессию.
 session_start();
 
-$db_user = 'u52830';   // Логин БД
-$db_pass = '7841698';  // Пароль БД
+$db_user = 'u47755';   // Логин БД
+$db_pass = '2914865';  // Пароль БД
 
 // В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
 // и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
@@ -43,7 +43,7 @@ else {
   $login = $_POST['login'];
   $pass =  $_POST['pass'];
 
-  $db = new PDO('mysql:host=localhost;dbname=u52830', $db_user, $db_pass, array(
+  $db = new PDO('mysql:host=localhost;dbname=u47755', $db_user, $db_pass, array(
     PDO::ATTR_PERSISTENT => true
   ));
 
