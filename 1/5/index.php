@@ -110,8 +110,8 @@
         setcookie('uBio_value', $_POST['uBio'], time() + 30 * 24 * 60 * 60);
 	}
     $servername = '212.192.134.20';
-    $username = 'u47684';
-    $password = '8848410';
+    $username = 'u52830';
+    $password = '7841698';
     $dbname = 'uData';
     if (!empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])) {
         $conn = new mysqli($servername, $username, $password, $dbname);
@@ -149,9 +149,9 @@
             $uGen = $_POST['uGen'];
             $uLim = $_POST['uLim'];
             $uBio = $_POST['uBio'];
-            $user = 'u47684';
-            $pass = '8848410';
-            $db = new PDO('mysql:host=localhost;dbname=u47684', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+            $user = 'u52830';
+            $pass = '7841698';
+            $db = new PDO('mysql:host=localhost;dbname=u52830', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
             $stmt = $db->prepare("INSERT INTO uData (Name, Email, Birthdate, Gender,Limbs, Bio) VALUES (:name, :email, :date, :gen, :lim,  :bio)");
             $stmt->bindParam(':name', $uName);
             $stmt->bindParam(':email', $uMail);
