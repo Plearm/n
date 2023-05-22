@@ -1,148 +1,108 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Задание 4</title>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title></title>
+    <link rel="stylesheet" href="Style.css">
     <style>
-        /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
-        .error {
-            border: 2px solid red;
-        }
+      .error {
+        border: 5px solid red;
+        background-color: red;
+        color: white;
+        border-radius: 7px;
+        margin: 10px 5px;
+        padding: 10px;
+        max-width: 350px;
+        align: "center";
+      }
     </style>
-</head>
-<body>
-<?php
-if (!empty($messages)) {
-    print('<div id="messages">');
-    // Выводим все сообщения.
-    foreach ($messages as $message) {
-        print($message);
-    }
-    print('</div>');
-}
-
-// Далее выводим форму отмечая элементы с ошибками классом error
-// и задавая начальные значения элементов ранее сохраненными.
-?>
-<div class="formss">
-    <form action="index.php" method="POST">
-        <label>ФИО:<br/><input name="fio" <?php if ($errors['fio']) {print 'class="error"';} ?> value="<?php print $values['fio']; ?>"/></label>
-        <label>Почта:<br/><input name="email" <?php if ($errors['email']) {print 'class="error"';} ?> value="<?php print $values['email']; ?>"/></label>
-        <label>Год рождения:<br/>
-            <?php
-            if ($errors['year']) {
-                print('<select name="year" class="error">');
-                for ($i = 1922; $i <= 2022; $i++) {
-                    printf('<option value="%d">%d год</option>', $i, $i);
-                }
-            }
-            else {
-                if($values['year']=='' || $values['year']<1922 || $values['year']>2022){
-                    printf('<select name="year">');
-                    for ($i = 1922; $i <= 2022; $i++) {
-                        printf('<option value="%d">%d год</option>', $i, $i);
-                    }
-                }
-                else {
-                    printf('<select name="year">');
-                    for ($i = 1922; $i < $values['year']; $i++) {
-                        printf('<option value="%d">%d год</option>', $i, $i);
-                    }
-                    printf('<option value="%d" selected="selected">%d год</option>', $i, $i);
-                    for ($i = $values['year'] + 1; $i <= 2022; $i++) {
-                        printf('<option value="%d">%d год</option>', $i, $i);
-                    }
-                }
-            }
-            ?>
-            </select>
-        </label>
-        Пол:<br/>
-        <?php
-        if($values['pol'] == 'W'){
-            printf('<label class="pot"><input type="radio" name="pol" value="M">M</label>');
-            printf('<label class="pot"><input type="radio" name="pol" value="W" checked="checked">W</label>');
-          }
-          else
-              if($values['pol'] == 'M'){
-            printf('<label class="pot"><input type="radio" name="pol" value="M" checked="checked">M</label>');
-            printf('<label class="pot"><input type="radio" name="pol" value="W">W</label>');
+  </head>
+  <body>
+    <?php
+      if (!empty($messages)) {
+        print('<div id="messages">');
+        //   Выводим все сообщения.
+        foreach ($messages as $message) {
+          print($message);
         }
-        else{
-            if($errors['pol']){
-                printf('<label class="pot error" ><input type="radio" name="pol" value="M">M</label>');
-                printf('<label class="pot error" ><input type="radio" name="pol" value="W">W</label>');
-            }
-            else{
-                printf('<label class="pot"><input type="radio" name="pol" value="M">M</label>');
-                printf('<label class="pot"><input type="radio" name="pol" value="W">W</label>');
-            }
-        }
-        ?>
-        Кол-во конечностей:<br/>
-        <?php
-        if($errors['limbs']){
-            for ($i = 1; $i <= 5; $i++)
-                printf('<label class="error"><input type="radio" name="limbs" value="%d"/>%d</label>', $i, $i);
-        }
-        else
-            if($values['limbs']==''){
-                for ($i = 1; $i <= 5; $i++)
-                    printf('<label><input type="radio" name="limbs" value="%d"/>%d</label>', $i, $i);
-            }
-            else{
-                for ($i = 1; $i < $values['limbs']; $i++)
-                    printf('<label><input type="radio" name="limbs" value="%d"/>%d</label>', $i, $i);
-                printf('<label><input type="radio" name="limbs" checked="checked" value="%d">%d</label>', $values['limbs'], $values['limbs']);
-                for ($i = $values['limbs']+1; $i <= 5; $i++)
-                    printf('<label><input type="radio" name="limbs" value="%d"/>%d</label>', $i, $i);
-            }
-        ?>
-        <label>
-            Сверхспособности:<br/>
-            <?php
-            $mas = ['бессмертие', 'прохождение сквозь стены', 'левитация'];
-            $flag = [0, 0, 0];
-            if($errors['super']){
-                printf('<select name="super[]" class="error" multiple="multiple">');
-                printf('<option value="1">бессмертие</option>
-                <option value="2">прохождение сквозь стены</option>
-                <option value="3">левитация</option></select>');
-            }
-            else
-                if($values['super']==''){
-                    printf('<select name="super[]" multiple="multiple">');
-                    printf('<option value="1">бессмертие</option>
-                    <option value="2">прохождение сквозь стены</option>
-                    <option value="3">левитация</option></select>');
-                }
-                else{
-                    printf('<select name="super[]" multiple="multiple">');
-                    foreach($values['super'] as $sup){
-                        if($mas[(int)$sup-1]){
-                            printf('<option value="%d" selected="selected">%s</option>',$sup, $mas[(int)$sup-1]);
-                            $flag[(int)$sup-1] = 1;
-                        }
-                    }
-                    for($i=0;$i<sizeof($flag);$i++){
-                        if(!$flag[$i]){
-                            printf('<option value="%d" >%s</option>',$i+1, $mas[$i]);
-                        }
-                    }
-            }
-            printf('</select>');
-            ?>
-        </label><br/>
-        <label>
-            Биография:<br/>
-            <textarea name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> value="<?php print $values['biography'];?>"><?php print $values['biography'];?></textarea>
-        </label><br/>
-        <label <?php if ($errors['check-1']) {print 'class="error"';} ?>>
-            <input type="checkbox" <?php if ($errors['check-1']) {print 'class="error"';} else if($values['check-1']!='') {print 'checked="checked"';}?> name="check-1"/>
-            с контрактом ознакомлен (а)
-        </label><br/>
-        <input type="submit" value="Отправить"/>
-    </form>
+        print('</div>');
+      }
+      // Далее выводим форму отмечая элементы с ошибками классом error
+      // и задавая начальные значения элементов ранее сохраненными.
+    ?>
+    <style>
+      .form_class {
+	      border: 3px solid black;
+	      border-radius: 5px;
+	      background-color: aqua;
+      }
+    </style>
+    <div class="form_class">
+  <div >
+  <form action="index.php" method = "POST" >
+	<div> Имя: </div>
+  <label <?php  if(!empty($_COOKIE['uName_error'])) {print 'class="error"';}?>>
+  <input  type="text" name="uName" placeholder="Ваше имя" autocomplete="off" 
+  </label>
+	<br/>	
+	<div> Email: </div>	
+	<label>
+    <input  type="text" name="uMail" placeholder="E-mail" autocomplete="off">
+  </label><br/>
+	<div> Дата рождения: </div>
+  <label>
+    <input  type="date" name="uDate" autocomplete="off">
+  </label>
+	<br/>
+  <div> Пол: </div>
+	<div >
+    <input type="radio" value="1" name="uGen" id="uMale" checked="checked">
+    <label for="uMale"> Мужской </label>
+  </div>
+  <div>
+  	<input type="radio" value="2" name="uGen" id="uFemale">
+  	<label  for="uFemale"> Женский: </label>
+  </div>
+	<div> Кол-во конечностей: </div>
+	<div >
+		<input type="radio" value="1" name="uLim" id="uNorm" checked="checked">
+    <label  for="userHealthy"> 2 ноги и 2 руки </label>
+  </div>
+  <div >
+    <input  type="radio" value="2" name="uLim" id="uLess">
+    <label  for="userDisabled">Чего-то не хватает </label>
+	</div>
+	</div>
+    <input  type="radio" value="3" name="uLim" id="uMore">
+    <label for="uMore"> Больше чем нужно:)</label>
+    <div>Ваша биография:</div>
+    <label>
+  	<textarea name="uBio" placeholder="Ваша биография" autocomplete="off"></textarea>
+    </label>
+		<br/>
+    <div> Сверхспособности: </div>
+  <label>
+    <select  multiple aria-label="multiple select" name="uPow">
+      <option value="0">Бессмертие</option>
+      <option value="1">Прохождение сквозь стены</option>
+      <option value="2">Левитация</option>
+    </select>
+  </label>
+  <div>
+    <label >
+			<input type="checkbox" id="check">С контрактом согласен!
+		</label>
+		<br/>
+	</div>
+  <div >
+    <input type="submit" id="submitButton" value="Свяжитесь с нами!">
+  </div>
+  </div>
 </div>
-</body>
+</div>
+</form>
+</div>
+</div>
+  </body>
 </html>
