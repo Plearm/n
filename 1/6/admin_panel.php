@@ -11,7 +11,7 @@
 <?php
 $user = 'u47755';
 $pass = '2914865';
-$db = new PDO('mysql:host=localhost;dbname=u52830', $user, $pass, [PDO::ATTR_PERSISTENT => true]);
+$db = new PDO('mysql:host=localhost;dbname=u47755', $user, $pass, [PDO::ATTR_PERSISTENT => true]);
 if (!empty($messages)) {
     print('<div id="messages">');
     // Выводим все сообщения.
