@@ -16,13 +16,13 @@ if (!empty($messages)) {
     <form action="index.php" method="POST">
             <div class="pas <?php if ($errors['name']) {print 'error';} ?>" >
                 Имя:
-                <input name="name" placeholder="Введите имя" 
+                <input name="name" placeholder="Имя" 
                  value="<?php print $values['name']; ?>" />
             </div>
 
             <div class="pas <?php if ($errors['email']) {print 'error';} ?>">
                 E-mail:
-                <input name="email" type="email" placeholder="Введите почту" value="<?php print $values['email']; ?>"
+                <input name="email" type="email" placeholder="Пароль" value="<?php print $values['email']; ?>"
 	            >
             </div>
 
@@ -69,13 +69,13 @@ if (!empty($messages)) {
 
 
             <div class="pas <?php if ($errors['super']) {print 'error';} ?>">
-                Сверхспособности?
+                Какие Сверхспособности?
                 
                     <select name="super[]" multiple="multiple">
                     <?php if ($errors['super']) {print 'class="error"';} ?> >
                     <option value="inv" <?php if($values['inv']==1){print 'selected';} ?>>Бессмертие</option>
-                    <option value="walk" <?php if($values['walk']==1){print 'selected';} ?>>прохождение сквозь стены</option>
-                    <option value="fly" <?php if($values['fly']==1){print 'selected';} ?>>левитация</option>
+                    <option value="walk" <?php if($values['walk']==1){print 'selected';} ?>>Прохождение сквозь стены</option>
+                    <option value="fly" <?php if($values['fly']==1){print 'selected';} ?>>Левитация</option>
                     </select>
                 
             </div>
