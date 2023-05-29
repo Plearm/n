@@ -1,23 +1,4 @@
-<style>
-body{
-    background-color: #fcee0a;
-    display: flex;
-    justify-content:center;
-    margin-top:5%;
-    margin-bottom:5%;
-}
-  .form1{
-    max-width: 960px;
-    text-align: center;
-    margin: 0 auto;
-  }
-  .error {
-    border: 3px solid #fd0130;
-  }
-  .hidden{
-    display: none;
-  }
-</style>
+
 <body>
   <div class="table1">
     <table border="1">
