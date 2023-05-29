@@ -296,7 +296,7 @@ else {
             $abil = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
             var_dump($abil);
             var_dump($_POST['super']);
-            if (!array_diff($abil, $_POST['super'])) {
+            if (array_diff($abil, $_POST['super']) || count($abil) != count($_POST['super'])) {
                 $stmt = $db->prepare("DELETE FROM userconnection WHERE idap = ?");
                 $stmt->execute([$app_id]);
 
