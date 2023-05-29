@@ -22,21 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   header('Location: index.php');
   }else{
 ?>
-<style>
-  body{
-  background-color: black;
-  }
-  .log-in{
-    font-family: "Montserrat", sans-serif;
-    max-width: 960px;
-    text-align: center;
-    margin: 0 auto;
-    padding: 40px;
-    width: 250px;
-    background-color: #00ffd2;
-    border: 2px solid #fd0130;
-  }
-</style>
+
 <div class="log-in">
 <form action="login.php" method="post">
   <input name="login" /> Логин<br>
