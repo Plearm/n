@@ -55,9 +55,9 @@
       ?>
     </table>
     <?php
-    printf('Пользователи с inv: %d <br>',$pwrs_count[0]);
-    printf('Пользователи с walk: %d <br>',$pwrs_count[1]);
-    printf('Пользователи с fly: %d <br>',$pwrs_count[2]);
+    printf('Количество Пользователей с Невидимостью: %d <br>',$pwrs_count[0]);
+    printf('Количество Пользователей с Прохождением Сквозь Стены: %d <br>',$pwrs_count[1]);
+    printf('Количество Пользователей с Левитацией: %d <br>',$pwrs_count[2]);
     ?>
   </div>
 </body>
