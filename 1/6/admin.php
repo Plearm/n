@@ -141,13 +141,13 @@ $allusers = null;
 $db = null;
 try {
   $db = connectDb();
-  $initialauth = $db->prepare("INSERT INTO admin_auth (login,pass_hash)
   SELECT * FROM (SELECT :login AS login, :pwd_hash AS pass_hash) AS temp
   WHERE NOT EXISTS (
       SELECT login FROM admin_auth WHERE login = :login
   ) LIMIT 1;");
   $initialauth->bindParam(':login',$admin);
   $initialauth->bindParam(':pwd_hash',$hsh);
+  $initialauth = $db->prepare("INSERT INTO admin_auth (login,pass_hash)
   if($initialauth->execute() == false){
 		print_r($initialauth->errorCode());
 		print_r($initialauth->errorInfo());
