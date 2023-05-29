@@ -1,35 +1,4 @@
-<style>
-body{
-    background-color: #fcee0a;
-    display: flex;
-    justify-content:center;
-    margin-top:5%;
-    margin-bottom:5%;
-}
-.main{
-    padding: 40px;
-    width: 250px;
-    background-color: #00ffd2;
-    border: 2px solid #fd0130;
-    border-radius: 10px;
-}
 
-h1{
-    margin-left: 25%;
-    margin-right: 25%;
-}
-
-.pas{
-    margin:2%;
-    padding: 5%;
-    border: 1px solid;
-    border-color: #fd0130;
-    border-radius: 3px;
-}
-.error {
-    border-color: #fd0130;
-  }
-</style>
 <?php
 if (!empty($messages)) {
   print('<div id="messages">');
