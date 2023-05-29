@@ -53,12 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $errors['check-1'] = !empty($_COOKIE['check_error']);
   if ($errors['name']) {
     setcookie('name_error', '', 100000);
-    $messages[] = '<div class="error">Заполните имя или у него неверный формат (only English)</div>';
+    $messages[] = '<div class="error">Заполните имя или у него неверный формат (на Английском)</div>';
     $error=TRUE;
   }
   if ($errors['email']) {
     setcookie('email_error', '', 100000);
-    $messages[] = '<div class="error">Заполните имейл или у него неверный формат</div>';
+    $messages[] = '<div class="error">Заполните email или у него неверный формат</div>';
     $error=TRUE;
   }
   if ($errors['year']) {
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
   if ($errors['bio']) {
     setcookie('bio_error', '', 100000);
-    $messages[] = '<div class="error">Заполните биографию или у неё неверный формат (only English)</div>';
+    $messages[] = '<div class="error">Заполните биографию или у неё неверный формат (только Английский)</div>';
     $error=TRUE;
   }
   $values = array();
