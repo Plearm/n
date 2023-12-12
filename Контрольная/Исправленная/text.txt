@@ -1,1 +1,85 @@
+#include <iostream>
+#include <mpi.h>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+int main(int argc, char** argv) {
+    MPI_Init(&argc, &argv); // Инициализация MPI
 
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size); // Получение общего числа процессов
+    int sum;
+    if (world_size != 2) {
+        cout << "2 processes!" << std::endl;
+        MPI_Abort(MPI_COMM_WORLD, 1); // Аварийное завершение программы, если число процессов не равно 2
+    }
+
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank); // Получение номера текущего процесса
+
+    int numbers_count;
+    if (world_rank == 0) {
+        cout << "Kol-vo: ";
+        cin >> numbers_count;
+    }
+
+    MPI_Bcast(&numbers_count, 1, MPI_INT, 0, MPI_COMM_WORLD); // Распределение количества чисел всем процессам
+
+    MPI_Barrier(MPI_COMM_WORLD); // Синхронизация процессов перед началом замера времени
+    double start_time = MPI_Wtime(); // Замер времени начала выполнения программы
+
+    if (world_rank == 0) {
+        // Процесс 0 генерирует случайные числа и отправляет их процессу 1
+        srand(static_cast<unsigned>(time(nullptr)));
+        int* numbers = new int[numbers_count]; // Выделение динамической памяти под массив чисел
+
+        // Генерация случайных чисел
+        for (int i = 0; i < numbers_count; ++i) {
+            numbers[i] = rand() % 100;  // Генерация случайных чисел от 0 до 99
+            cout << "Chislo " << i + 1 << " = " << numbers[i] << endl;
+        }
+
+        // Отправка чисел процессу 1
+        MPI_Send(numbers, numbers_count, MPI_INT, 1, 0, MPI_COMM_WORLD);
+
+
+        // Получение результата от процесса 1
+        int sum;
+        MPI_Recv(&sum, 1, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        // Вывод результата
+        cout << "Sum: " << sum << endl;
+
+        delete[] numbers; // Освобождение динамической памяти
+    }
+    else if (world_rank == 1) {
+        // Процесс 1 получает числа от процесса 0, суммирует их и отправляет результат обратно
+        int* received_numbers = new int[numbers_count]; // Выделение динамической памяти под массив чисел
+
+        // Получение чисел от процесса 0
+        MPI_Recv(received_numbers, numbers_count, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        // Вычисление суммы
+        sum = 0;
+        for (int i = 0; i < numbers_count; ++i) {
+            sum += received_numbers[i];
+        }
+        delete[] received_numbers; // Освобождение динамической памяти
+
+        // Отправка результата процессу 0
+        MPI_Send(&sum, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        
+    }
+
+    MPI_Barrier(MPI_COMM_WORLD); // Синхронизация процессов перед завершением замера времени
+    double end_time = MPI_Wtime(); // Замер времени окончания выполнения программы
+    
+    if (world_rank == 0) {
+        // Вывод времени выполнения на экран только из процесса 0
+        cout << "Time: " << end_time - start_time << " seconds" << endl;
+    }
+
+    MPI_Finalize(); // Завершение работы с MPI
+
+    return 0;
+}
