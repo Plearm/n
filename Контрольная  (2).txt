@@ -1,87 +1,175 @@
+Дихотомия
+
+
 #include <iostream>
-#include <mpi.h>
-#include <cstdlib>
-#include <ctime>
-using namespace std;
-int main(int argc, char** argv) {
-    MPI_Init(&argc, &argv);
+#include <cmath>
 
-    int world_size;
-    MPI_Comm_size(MPI_COMM_WORLD, &world_size); // Количество
-    int sum;
-    if (world_size != 2) {
-        cout << "2 processes!" << endl;
-        MPI_Abort(MPI_COMM_WORLD, 1); // Аварийное завершение программы, если число процессов не равно 2
+double func(double x) {
+    // Здесь определите вашу функцию
+    // Пример: f(x) = x^2 - 4
+    return x * x - 4;
+}
+
+double bisectionMethod(double a, double b, double tol, double& minimum) {
+    if (func(a) * func(b) >= 0) {
+        std::cout << "Неправильный выбор начальных точек a и b";
+        return 0;
     }
 
-    int world_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank); // Номер
+    double c = a;
+    while ((b - a) >= tol) {
+        // Находим середину отрезка
+        c = (a + b) / 2;
 
-    int numbers_count;
-    if (world_rank == 0) {
-        cout << "Kol-vo: ";
-        cin >> numbers_count;
+        // Если значение функции в c близко к нулю,
+        // то мы нашли приближенное решение
+        if (func(c) == 0.0) {
+            break;
+        }
+        // Если знаки функции на концах отрезка разные,
+        // то продолжаем поиск в нужном направлении
+        else if (func(c) * func(a) < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
     }
 
-    MPI_Bcast(&numbers_count, 1, MPI_INT, 0, MPI_COMM_WORLD); // Распределение количества чисел всем процессам
+    minimum = c; // Сохраняем точку минимума
+
+    return func(c); // Возвращаем значение функции в найденной точке
+}
+
+int main() {
+    double a = 1.0; // Начало отрезка
+    double b = 3.0; // Конец отрезка
+    double tol = 0.0001; // Точность
+
+    double minimum;
+    double root = bisectionMethod(a, b, tol, minimum);
+    std::cout << "Приближенное значение корня: " << root << std::endl;
+    std::cout << "Значение функции в найденной точке: " << func(root) << std::endl;
+    std::cout << "Интервал: [" << a << ", " << b << "]" << std::endl;
+    std::cout << "Точка минимума: " << minimum << std::endl;
+
+    return 0;
+}
+
+
+
+
+
+
+ЗОЛОТОЕ СЕЧЕНИЕ
+
+#include <iostream>
+#include <cmath>
+
+double func(double x) {
+    // Здесь определите вашу функцию
+    // Пример: f(x) = x^2 - 4
+    return x * x - 4;
+}
+
+double goldenSection(double a, double b, double tol) {
+    double tau = (sqrt(5.0) - 1.0) / 2.0; // Золотое сечение
+
+    double x1 = b - tau * (b - a);
+    double x2 = a + tau * (b - a);
+
+    double f1 = func(x1);
+    double f2 = func(x2);
+
+    while ((b - a) > tol) {
+        if (f1 < f2) {
+            b = x2;
+            x2 = x1;
+            f2 = f1;
+            x1 = b - tau * (b - a);
+            f1 = func(x1);
+        } else {
+            a = x1;
+            x1 = x2;
+            f1 = f2;
+            x2 = a + tau * (b - a);
+            f2 = func(x2);
+        }
+    }
+
+    return (a + b) / 2.0;
+}
+
+int main() {
+    double a = 1.0; // Начало отрезка
+    double b = 3.0; // Конец отрезка
+    double tol = 0.0001; // Точность
+
+    double root = goldenSection(a, b, tol);
+    std::cout << "Приближенное значение корня: " << root << std::endl;
+    std::cout << "Значение функции в найденной точке: " << func(root) << std::endl;
+    std::cout << "Интервал: [" << a << ", " << b << "]" << std::endl;
+
+    return 0;
+}
+
+
+
+
+фИБОНАЧЧИ
+#include <iostream>
+#include <cmath>
+
+// Вычисление n-ого числа Фибоначчи
+int fibonacci(int n) {
+    if (n <= 1)
+        return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+double func(double x) {
+    // Здесь определите вашу функцию
+    // Пример: f(x) = x^2 - 4
+    return x * x - 4;
+}
+
+double fibonacciMethod(double a, double b, double tol, int n) {
+    int fib_n = fibonacci(n); // Получаем n-ое число Фибоначчи
+
+    double x1 = a + (static_cast<double>(fibonacci(n - 2)) / fib_n) * (b - a);
+    double x2 = a + (static_cast<double>(fibonacci(n - 1)) / fib_n) * (b - a);
     
-    double start_time2 = MPI_Wtime(); // Замер времени начала выполнения программы (Без MPI_Barrier)
-    MPI_Barrier(MPI_COMM_WORLD); // Синхронизация процессов перед началом замера времени
-    double start_time = MPI_Wtime(); // Замер времени начала выполнения программы
+    double f1 = func(x1);
+    double f2 = func(x2);
 
-    if (world_rank == 0) {
-        // Процесс 0 генерирует случайные числа и отправляет их процессу 1
-        srand(static_cast<unsigned>(time(nullptr)));
-        int* numbers = new int[numbers_count]; // Выделение динамической памяти под массив чисел
-
-        // Генерация случайных чисел
-        for (int i = 0; i < numbers_count; ++i) {
-            numbers[i] = rand() % 100;  // Генерация случайных чисел от 0 до 99
-            cout << "Chislo " << i + 1 << " = " << numbers[i] << endl;
+    for (int k = 1; k <= n - 2; ++k) {
+        if (f1 < f2) {
+            b = x2;
+            x2 = x1;
+            f2 = f1;
+            x1 = a + (static_cast<double>(fibonacci(n - k - 2)) / fib_n) * (b - a);
+            f1 = func(x1);
+        } else {
+            a = x1;
+            x1 = x2;
+            f1 = f2;
+            x2 = a + (static_cast<double>(fibonacci(n - k - 1)) / fib_n) * (b - a);
+            f2 = func(x2);
         }
-
-        // Отправка чисел процессу 1
-        MPI_Send(numbers, numbers_count, MPI_INT, 1, 0, MPI_COMM_WORLD);
-
-
-        // Получение результата от процесса 1
-        int sum;
-        MPI_Recv(&sum, 1, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // Вывод результата
-        cout << "Sum: " << sum << endl;
-
-        delete[] numbers; // Освобождение динамической памяти
-    }
-    else if (world_rank == 1) {
-        // Процесс 1 получает числа от процесса 0, суммирует их и отправляет результат обратно
-        int* received_numbers = new int[numbers_count]; // Выделение динамической памяти под массив чисел
-
-        // Получение чисел от процесса 0
-        MPI_Recv(received_numbers, numbers_count, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // Вычисление суммы
-        sum = 0;
-        for (int i = 0; i < numbers_count; ++i) {
-            sum += received_numbers[i];
-        }
-        delete[] received_numbers; // Освобождение динамической памяти
-
-        // Отправка результата процессу 0
-        MPI_Send(&sum, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
     }
 
-    double end_time2 = MPI_Wtime(); // Замер времени окончания выполнения программы (Без MPI_Barrier)
-    MPI_Barrier(MPI_COMM_WORLD); // Синхронизация процессов перед завершением замера времени
-    double end_time = MPI_Wtime(); // Замер времени окончания выполнения программы
+    return (a + b) / 2.0;
+}
 
-    if (world_rank == 0) {
-        // Вывод времени выполнения на экран только из процесса 0
-        cout << "Time (No MPI_Barrier): " << end_time2 - start_time2 << " seconds" << endl;
-        cout << "Time (MPI_Barrier): " << end_time - start_time << " seconds" << endl;
-    }
+int main() {
+    double a = 1.0; // Начало отрезка
+    double b = 3.0; // Конец отрезка
+    double tol = 0.0001; // Точность
+    int n = 10; // Количество чисел Фибоначчи (можно изменить по вашему выбору)
 
-    MPI_Finalize(); // Завершение работы с MPI
+    double root = fibonacciMethod(a, b, tol, n);
+    std::cout << "Приближенное значение корня: " << root << std::endl;
+    std::cout << "Значение функции в найденной точке: " << func(root) << std::endl;
+    std::cout << "Интервал: [" << a << ", " << b << "]" << std::endl;
 
     return 0;
 }
