@@ -173,3 +173,67 @@ int main() {
 
     return 0;
 }
+
+
+
+Напиши метод Дихотомии на c++
+
+
+#include <iostream>
+#include <cmath>
+
+double func(double x) {
+    // Здесь определите вашу функцию
+    // Пример: f(x) = x^2 - 4
+    return x * x - 4;
+}
+
+double dichotomyWithStep(double a, double b, double tol, double step) {
+    if (func(a) * func(b) >= 0) {
+        std::cout << "Неправильный выбор начальных точек a и b";
+        return 0;
+    }
+
+    double c = a;
+    while ((b - a) >= tol) {
+        // Находим середину отрезка
+        c = (a + b) / 2;
+
+        // Если значение функции в c близко к нулю,
+        // то мы нашли приближенное решение
+        if (func(c) == 0.0) {
+            break;
+        }
+        // Если знаки функции на концах отрезка разные,
+        // то продолжаем поиск в нужном направлении
+        else if (func(c) * func(a) < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
+
+        // Перемещаемся на шаг в нужном направлении
+        if (b - a < step) {
+            break;
+        } else if (func(a) < func(b)) {
+            a -= step;
+        } else {
+            b += step;
+        }
+    }
+
+    return c;
+}
+
+int main() {
+    double a = 1.0; // Начало отрезка
+    double b = 3.0; // Конец отрезка
+    double tol = 0.0001; // Точность
+    double step = 0.01; // Шаг
+
+    double root = dichotomyWithStep(a, b, tol, step);
+    std::cout << "Приближенное значение корня: " << root << std::endl;
+    std::cout << "Значение функции в найденной точке: " << func(root) << std::endl;
+
+    return 0;
+}
