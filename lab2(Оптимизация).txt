@@ -1,0 +1,57 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+double func(double x) {
+    return x * x - 6 * x + 12;
+}
+
+double Gold(double a, double b, double tol) {
+    double tau = (sqrt(5.0) - 1.0) / 2.0;
+
+    double x1 = b - tau * (b - a);
+    double x2 = a + tau * (b - a);
+
+    double f1 = func(x1);
+    double f2 = func(x2);
+
+    cout << "Шаг 1: a = " << a << ", b = " << b << ", x1 = " << x1 << ", x2 = " << x2 << endl;
+
+    int step = 1;
+
+    while ((b - a) > tol) {
+        if (f1 < f2) {
+            b = x2;
+            x2 = x1;
+            f2 = f1;
+            x1 = b - tau * (b - a);
+            f1 = func(x1);
+        }
+        else {
+            a = x1;
+            x1 = x2;
+            f1 = f2;
+            x2 = a + tau * (b - a);
+            f2 = func(x2);
+        }
+
+        cout << "Шаг " << ++step << ": a = " << a << ", b = " << b << ", x1 = " << x1 << ", x2 = " << x2 << endl;
+    }
+
+    double minimum = (a + b) / 2.0;
+    cout << "Минимум: " << minimum << endl;
+
+    return minimum;
+}
+
+int main() {
+    setlocale(LC_ALL,"ru");
+    double a = 1.0;
+    double b = 11.0;
+    double tochnost = 0.5;
+
+    double root = Gold(a, b, tochnost);
+    cout << "Приближенное значение корня: " << root << endl;
+    cout << "Значение функции в найденной точке: " << func(root) << endl;
+    cout << "Интервал: [" << a << ", " << b << "]" << endl;
+    return 0;
+}
