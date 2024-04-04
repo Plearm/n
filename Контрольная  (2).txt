@@ -237,3 +237,63 @@ int main() {
 
     return 0;
 }
+
+
+
+#include <iostream>
+#include <cmath>
+
+double func(double x) {
+    // Здесь определите вашу функцию
+    // Пример: f(x) = x^2 - 4
+    return x * x - 4;
+}
+
+double goldenSection(double a, double b, double tol) {
+    double tau = (sqrt(5.0) - 1.0) / 2.0; // Золотое сечение
+
+    double x1 = b - tau * (b - a);
+    double x2 = a + tau * (b - a);
+
+    double f1 = func(x1);
+    double f2 = func(x2);
+
+    std::cout << "Шаг 1: a = " << a << ", b = " << b << ", x1 = " << x1 << ", x2 = " << x2 << std::endl;
+
+    int step = 1;
+
+    while ((b - a) > tol) {
+        if (f1 < f2) {
+            b = x2;
+            x2 = x1;
+            f2 = f1;
+            x1 = b - tau * (b - a);
+            f1 = func(x1);
+        } else {
+            a = x1;
+            x1 = x2;
+            f1 = f2;
+            x2 = a + tau * (b - a);
+            f2 = func(x2);
+        }
+
+        std::cout << "Шаг " << ++step << ": a = " << a << ", b = " << b << ", x1 = " << x1 << ", x2 = " << x2 << std::endl;
+    }
+
+    double minimum = (a + b) / 2.0;
+    std::cout << "Минимум: " << minimum << std::endl;
+
+    return minimum;
+}
+
+int main() {
+    double a = 1.0; // Начало отрезка
+    double b = 3.0; // Конец отрезка
+    double tol = 0.0001; // Точность
+
+    double root = goldenSection(a, b, tol);
+    std::cout << "Приближенное значение корня: " << root << std::endl;
+    std::cout << "Значение функции в найденной точке: " << func(root) << std::endl;
+
+    return 0;
+}
