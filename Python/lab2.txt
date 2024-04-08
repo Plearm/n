@@ -66,3 +66,37 @@ for key in sorted_keys:
 apple - malum, pomum, popula
 fruit - baca, bacca, popum
 punishment - malum, multa
+
+
+
+
+
+
+Переделанный 
+
+def strat(max_number, questions):
+    possib = set(range(1, max_number + 1))
+
+    for question in questions:
+        question_numbers = set(map(int, question.split()))
+        otvet = "YES" if len(question_numbers) > (max_number / 2) else "NO"
+        if otvet == "YES":
+            possib &= question_numbers
+        else:
+            possib -= question_numbers
+        print(otvet)
+
+    remaining_numbers = sorted(possib)
+    return remaining_numbers
+
+max_number = int(input())
+questions = []
+while True:
+    question = input()
+    if question == "HELP":
+        break
+    questions.append(question)
+
+
+result = strat(max_number, questions)
+print(*result)
