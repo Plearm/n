@@ -1,1 +1,401 @@
 
+def gcd(a, b):
+    """Нахождение наибольшего общего делителя"""
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+def count_coprimes(n):
+    """Подсчет количества чисел, взаимно простых с заданным"""
+    count = 0
+    for i in range(1, n):
+        if gcd(i, n) == 1:
+            count += 1
+    return count
+
+def digit_sum_divisible_by_3(number):
+    """Нахождение суммы цифр числа, делящихся на 3"""
+    digit_sum = 0
+    for digit in str(number):
+        if int(digit) % 3 == 0:
+            digit_sum += int(digit)
+    return digit_sum
+
+def find_coprime_divisor(number):
+    """Нахождение делителя числа, являющегося взаимно простым с суммой цифр числа"""
+    sum_of_digits = digit_sum_divisible_by_3(number)
+    for divisor in range(2, sum_of_digits):
+        if gcd(divisor, sum_of_digits) == 1:
+            return divisor
+    return None
+
+# Пример использования функций
+number = 123456
+print("Количество чисел, взаимно простых с", number, ":", count_coprimes(number))
+print("Сумма цифр числа", number, "делящихся на 3:", digit_sum_divisible_by_3(number))
+print("Делитель числа", number, ", взаимно простой с суммой цифр:", find_coprime_divisor(number))
+
+
+
+
+
+
+
+
+
+import os
+
+def are_lowercase_ordered(string):
+    """
+    Проверяет, упорядочены ли строчные символы в строке по возрастанию.
+    """
+    filtered_string = ''.join(filter(str.islower, string))
+    return filtered_string == ''.join(sorted(filtered_string))
+
+def count_letter_A(string):
+    """
+    Подсчитывает количество букв 'A' в строке.
+    """
+    return string.count('A')
+
+def find_filename_without_extension(file_path):
+    """
+    Находит имя файла без разрешения в строке с путем к файлу.
+    """
+    return os.path.splitext(os.path.basename(file_path))[0]
+
+# Предложение пользователю выбрать задачу
+print("Выберите задачу, которую вы хотите решить:")
+print("1) Проверить упорядоченность строчных символов в строке по возрастанию.")
+print("2) Подсчитать количество букв 'A' в строке.")
+print("3) Найти имя файла без разрешения в пути к файлу.")
+
+choice = input("Введите номер выбранной задачи (1, 2 или 3): ")
+
+# Обработка выбора пользователя
+if choice == '1':
+    string = input("Введите строку для проверки: ")
+    print("Строчные символы в строке упорядочены по возрастанию:", are_lowercase_ordered(string))
+elif choice == '2':
+    string = input("Введите строку для подсчета букв 'A': ")
+    print("Количество букв 'A' в строке:", count_letter_A(string))
+elif choice == '3':
+    file_path = input("Введите путь к файлу: ")
+    print("Имя файла без разрешения:", find_filename_without_extension(file_path))
+else:
+    print("Неверный выбор. Пожалуйста, введите номер задачи от 1 до 3.")
+
+
+
+
+
+
+
+
+import re
+
+def find_dates(text):
+    """
+    Находит все даты в формате "день месяца год" в тексте.
+    """
+    pattern = r'\b\d{1,2}\s(?:января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s\d{4}\b'
+    dates = re.findall(pattern, text)
+    return dates
+
+# Пример использования функции
+text = "Сегодня 31 февраля 2007 года и 15 июля 2023 года."
+result = find_dates(text)
+print(result)
+
+
+
+
+
+
+
+
+                              Задача 6-8
+
+import os
+
+def find_used_latin_chars(text):
+    """
+    Находит все строчные символы латиницы, используемые в строке.
+    """
+    latin_chars = set(char for char in text if char.islower() and char.isascii())
+    return sorted(latin_chars)
+
+def count_unique_latin_chars(text):
+    """
+    Подсчитывает количество задействованных символов латиницы в строке без учета дубликатов.
+    """
+    latin_chars = set(char for char in text if char.islower() and char.isascii())
+    return len(latin_chars)
+
+def find_filename_without_extension(file_path):
+    """
+    Находит имя файла без расширения в строке с путем к файлу.
+    """
+    return os.path.splitext(os.path.basename(file_path))[0]
+
+# Предложение пользователю выбрать задачу
+print("Выберите задачу, которую вы хотите решить:")
+print("1) Найти все строчные символы латиницы, используемые в строке.")
+print("2) Подсчитать количество задействованных символов латиницы в строке без учета дубликатов.")
+print("3) Найти имя файла без расширения в строке с путем к файлу.")
+
+choice = input("Введите номер выбранной задачи (1, 2 или 3): ")
+
+# Обработка выбора пользователя
+if choice == '1':
+    text = input("Введите строку для поиска строчных символов латиницы: ")
+    print("Строчные символы латиницы, используемые в строке:", find_used_latin_chars(text))
+elif choice == '2':
+    text = input("Введите строку для подсчета задействованных символов латиницы: ")
+    print("Количество задействованных символов латиницы в строке без учета дубликатов:", count_unique_latin_chars(text))
+elif choice == '3':
+    file_path = input("Введите путь к файлу: ")
+    print("Имя файла без расширения:", find_filename_without_extension(file_path))
+else:
+    print("Неверный выбор. Пожалуйста, введите номер задачи от 1 до 3.")
+
+
+
+                        Задача 9
+
+def main():
+    # Чтение списка строк с клавиатуры
+    num_strings = int(input("Введите количество строк: "))
+    strings = []
+    for i in range(num_strings):
+        string = input(f"Введите строку {i+1}: ")
+        strings.append(string)
+    
+    # Упорядочиваем список строк по длине
+    sorted_strings = sorted(strings, key=len)
+    
+    # Вывод отсортированного списка строк
+    print("\nОтсортированный список строк по длине:")
+    for string in sorted_strings:
+        print(string)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+                      Задача 10
+
+def main():
+    # Чтение списка строк с клавиатуры
+    num_strings = int(input("Введите количество строк: "))
+    strings = []
+    for i in range(num_strings):
+        string = input(f"Введите строку {i+1}: ")
+        strings.append(string)
+    
+    # Упорядочиваем список строк по количеству слов
+    sorted_strings = sorted(strings, key=lambda x: len(x.split()))
+
+    # Вывод отсортированного списка строк
+    print("\nОтсортированный список строк по количеству слов:")
+    for string in sorted_strings:
+        print(string)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+                    Задача 11-14
+def calculate_average_ascii_weight(string):
+    """
+    Вычисляет средний вес ASCII-кода символов в строке.
+    """
+    total_weight = sum(ord(char) for char in string)
+    return total_weight / len(string)
+
+def calculate_square_deviation(string, reference_weight):
+    """
+    Вычисляет квадратичное отклонение среднего веса ASCII-кода символов строки от заданного среднего веса.
+    """
+    average_weight = calculate_average_ascii_weight(string)
+    return (average_weight - reference_weight) ** 2
+
+def calculate_max_triple_weight(string):
+    """
+    Вычисляет максимальный средний вес ASCII-кода тройки подряд идущих символов в строке.
+    """
+    max_triple_weight = 0
+    for i in range(len(string) - 2):
+        triple_weight = sum(ord(char) for char in string[i:i+3]) / 3
+        max_triple_weight = max(max_triple_weight, triple_weight)
+    return max_triple_weight
+
+def count_mirror_triplets(string):
+    """
+    Подсчитывает количество "зеркальных" троек символов в строке.
+    """
+    count = 0
+    for i in range(len(string) - 2):
+        if string[i] == string[i+2] and string[i] != string[i+1]:
+            count += 1
+    return count
+
+def main():
+    # Чтение списка строк с клавиатуры
+    num_strings = int(input("Введите количество строк: "))
+    strings = []
+    for i in range(num_strings):
+        string = input(f"Введите строку {i+1}: ")
+        strings.append(string)
+    
+    # Предложение пользователю выбрать задачу
+    print("Выберите задачу, которую вы хотите решить:")
+    print("1) Отсортировать строки в порядке увеличения среднего веса ASCII-кода символов строки.")
+    print("2) Отсортировать строки в порядке увеличения квадратичного отклонения среднего веса ASCII-кода символов строки от среднего веса ASCII-кода символов первой строки.")
+    print("3) Отсортировать строки в порядке увеличения квадратичного отклонения между средним весом ASCII-кода символов в строке и максимально среднего ASCII-кода тройки подряд идущих символов в строке.")
+    print("4) Отсортировать строки в порядке увеличения среднего количества 'зеркальных' троек символов в строке.")
+
+    choice = input("Введите номер выбранной задачи (1, 2, 3 или 4): ")
+
+    # Обработка выбора пользователя
+    if choice == '1':
+        sorted_strings = sorted(strings, key=calculate_average_ascii_weight)
+    elif choice == '2':
+        reference_weight = calculate_average_ascii_weight(strings[0])
+        sorted_strings = sorted(strings, key=lambda x: calculate_square_deviation(x, reference_weight))
+    elif choice == '3':
+        sorted_strings = sorted(strings, key=lambda x: calculate_square_deviation(x, calculate_max_triple_weight(x)))
+    elif choice == '4':
+        sorted_strings = sorted(strings, key=count_mirror_triplets)
+    else:
+        print("Неверный выбор. Пожалуйста, введите номер задачи от 1 до 4.")
+        return
+
+    # Вывод отсортированного списка строк
+    print("\nОтсортированный список строк:")
+    for string in sorted_strings:
+        print(string)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+                Задача 15-19
+
+def find_two_smallest_indices(array):
+    """
+    Находит индексы двух наименьших элементов массива.
+    """
+    sorted_indices = sorted(range(len(array)), key=lambda i: array[i])
+    return sorted_indices[:2]
+
+def find_missing_numbers(array):
+    """
+    Находит все пропущенные числа в целочисленном массиве.
+    """
+    missing_numbers = [num for num in range(min(array), max(array)+1) if num not in array]
+    return missing_numbers
+
+def count_local_maxima(array):
+    """
+    Находит количество локальных максимумов в целочисленном массиве.
+    """
+    count = 0
+    for i in range(1, len(array)-1):
+        if array[i] > array[i-1] and array[i] > array[i+1]:
+            count += 1
+    return count
+
+def check_alternating_types(array):
+    """
+    Проверяет, чередуются ли в массиве целые и вещественные числа.
+    """
+    for i in range(len(array) - 1):
+        if type(array[i]) == type(array[i+1]):
+            return False
+    return True
+
+def is_prime(num):
+    """
+    Проверяет, является ли число простым.
+    """
+    if num <= 1:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
+def mean_of_non_primes_greater_than_mean_of_primes(array):
+    """
+    Считает среднее арифметическое непростых элементов списка,
+    которые больше среднего арифметического простых чисел.
+    """
+    primes = [num for num in array if is_prime(num)]
+    non_primes = [num for num in array if not is_prime(num)]
+    
+    if not non_primes:
+        return None
+
+    mean_primes = sum(primes) / len(primes)
+    non_primes_greater_than_mean = [num for num in non_primes if num > mean_primes]
+    
+    if not non_primes_greater_than_mean:
+        return None
+    
+    return sum(non_primes_greater_than_mean) / len(non_primes_greater_than_mean)
+
+def main():
+    # Чтение целочисленного массива с клавиатуры
+    array = list(map(int, input("Введите целочисленный массив через пробел: ").split()))
+
+    # Предложение пользователю выбрать задачу
+    print("Выберите задачу, которую вы хотите решить:")
+    print("1) Найти индексы двух наименьших элементов массива.")
+    print("2) Найти все пропущенные числа в целочисленном массиве.")
+    print("3) Найти количество локальных максимумов в целочисленном массиве.")
+    print("4) Проверить, чередуются ли в массиве целые и вещественные числа.")
+    print("5) Посчитать среднее арифметическое непростых элементов списка, которые больше среднего арифметического простых.")
+
+    choice = input("Введите номер выбранной задачи (1, 2, 3, 4 или 5): ")
+
+    # Обработка выбора пользователя
+    if choice == '1':
+        result = find_two_smallest_indices(array)
+        print("Индексы двух наименьших элементов массива:", result)
+    elif choice == '2':
+        result = find_missing_numbers(array)
+        print("Пропущенные числа в массиве:", result)
+    elif choice == '3':
+        result = count_local_maxima(array)
+        print("Количество локальных максимумов в массиве:", result)
+    elif choice == '4':
+        result = check_alternating_types(array)
+        if result:
+            print("В массиве чередуются целые и вещественные числа.")
+        else:
+            print("В массиве не чередуются целые и вещественные числа.")
+    elif choice == '5':
+        result = mean_of_non_primes_greater_than_mean_of_primes(array)
+        if result is not None:
+            print("Среднее арифметическое непростых элементов, которые больше среднего арифметического простых:", result)
+        else:
+            print("Непростые элементы, которые больше среднего арифметического простых, отсутствуют.")
+    else:
+        print("Неверный выбор. Пожалуйста, введите номер задачи от 1 до 5.")
+
+if __name__ == "__main__":
+    main()
