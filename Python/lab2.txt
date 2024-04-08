@@ -72,7 +72,7 @@ punishment - malum, multa
 
 
 
-Переделанный 
+Переделанный (ВАРИАНТ 7 - СДЕЛАТЬ)
 
 def strat(max_number, questions):
     possib = set(range(1, max_number + 1))
