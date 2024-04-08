@@ -100,3 +100,29 @@ while True:
 
 result = strat(max_number, questions)
 print(*result)
+
+
+
+
+
+
+              Переделанный (задание 2)
+
+n = int(input())
+
+dictionary = {}
+for _ in range(n):
+    english_word, translations_str = input().split(" - ")
+    translations = translations_str.split(", ")
+    for translation in translations:
+        latin_word = translation.split()[0]
+        if latin_word not in dictionary:
+            dictionary[latin_word] = []
+        dictionary[latin_word].append((english_word, translation))
+
+sorted_keys = sorted(dictionary.keys())
+print(len(sorted_keys))
+for key in sorted_keys:
+    english_words = ", ".join(sorted(english_word for english_word, _ in dictionary[key]))
+    
+    print("{} - {}".format(key, english_words))
