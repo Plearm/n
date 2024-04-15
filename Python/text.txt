@@ -194,6 +194,34 @@ if __name__ == "__main__":
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     Задача 11-14
 def calculate_average_ascii_weight(string):
     """
