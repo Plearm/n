@@ -1,0 +1,26 @@
+def august_numbers(max_number, questions):
+    possible_numbers = set(range(1, max_number + 1))
+
+    for i in range(0, len(questions), 2):
+        question_numbers = set(map(int, questions[i].split()))
+        if questions[i + 1] == "YES":
+            possible_numbers &= question_numbers
+        else:
+            possible_numbers -= question_numbers
+
+    remaining_numbers = sorted(possible_numbers)
+    return remaining_numbers
+
+# Входные данные
+max_number = int(input())
+questions = []
+while True:
+    question = input()
+    if question == "HELP":
+        break
+    answer = input()
+    questions.extend([question, answer])
+
+# Вызов функции и вывод результатов
+result = august_numbers(max_number, questions)
+print(*result)
