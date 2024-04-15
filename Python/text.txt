@@ -1,39 +1,36 @@
+                        Задание 1
 
 def gcd(a, b):
-    """Нахождение наибольшего общего делителя"""
     while b != 0:
         a, b = b, a % b
     return a
 
-def count_coprimes(n):
-    """Подсчет количества чисел, взаимно простых с заданным"""
+def count(n):
     count = 0
     for i in range(1, n):
         if gcd(i, n) == 1:
             count += 1
     return count
 
-def digit_sum_divisible_by_3(number):
-    """Нахождение суммы цифр числа, делящихся на 3"""
-    digit_sum = 0
+def divBy3(number):
+    digitSum = 0
     for digit in str(number):
         if int(digit) % 3 == 0:
-            digit_sum += int(digit)
-    return digit_sum
+            digitSum += int(digit)
+    return digitSum
 
-def find_coprime_divisor(number):
-    """Нахождение делителя числа, являющегося взаимно простым с суммой цифр числа"""
-    sum_of_digits = digit_sum_divisible_by_3(number)
-    for divisor in range(2, sum_of_digits):
-        if gcd(divisor, sum_of_digits) == 1:
+def find(number):
+    sumDig = divBy3(number)
+    for divisor in range(2, sumDig):
+        if gcd(divisor, sumDig) == 1:
             return divisor
     return None
 
 # Пример использования функций
 number = int(input())
-print("Количество чисел, взаимно простых с", number, ":", count_coprimes(number))
-print("Сумма цифр числа", number, "делящихся на 3:", digit_sum_divisible_by_3(number))
-print("Делитель числа", number, ", взаимно простой с суммой цифр:", find_coprime_divisor(number))
+print("Количество чисел, взаимно простых с", number, ":", count(number))
+print("Сумма цифр числа", number, "делящихся на 3:", divBy3(number))
+print("Делитель числа", number, ", взаимно простой с суммой цифр:", find(number))
 
 
 
@@ -42,29 +39,23 @@ print("Делитель числа", number, ", взаимно простой с
 
 
 
+                        Задание 2-4
 
 import os
 
-def are_lowercase_ordered(string):
-    """
-    Проверяет, упорядочены ли строчные символы в строке по возрастанию.
-    """
-    filtered_string = ''.join(filter(str.islower, string))
-    return filtered_string == ''.join(sorted(filtered_string))
+def lower(string):
 
-def count_letter_A(string):
-    """
-    Подсчитывает количество букв 'A' в строке.
-    """
+    filter = ''.join(filter(str.islower, string))
+    return filter == ''.join(sorted(filter))
+
+def count(string):
+
     return string.count('A')
 
-def find_filename_without_extension(file_path):
-    """
-    Находит имя файла без разрешения в строке с путем к файлу.
-    """
+def findFileName(file_path):
+
     return os.path.splitext(os.path.basename(file_path))[0]
 
-# Предложение пользователю выбрать задачу
 print("Выберите задачу, которую вы хотите решить:")
 print("1) Проверить упорядоченность строчных символов в строке по возрастанию.")
 print("2) Подсчитать количество букв 'A' в строке.")
@@ -72,16 +63,15 @@ print("3) Найти имя файла без разрешения в пути �
 
 choice = input("Введите номер выбранной задачи (1, 2 или 3): ")
 
-# Обработка выбора пользователя
 if choice == '1':
     string = input("Введите строку для проверки: ")
-    print("Строчные символы в строке упорядочены по возрастанию:", are_lowercase_ordered(string))
+    print("Строчные символы в строке упорядочены по возрастанию:", lower(string))
 elif choice == '2':
     string = input("Введите строку для подсчета букв 'A': ")
-    print("Количество букв 'A' в строке:", count_letter_A(string))
+    print("Количество букв 'A' в строке:", count(string))
 elif choice == '3':
     file_path = input("Введите путь к файлу: ")
-    print("Имя файла без разрешения:", find_filename_without_extension(file_path))
+    print("Имя файла без разрешения:", findFileName(file_path))
 else:
     print("Неверный выбор. Пожалуйста, введите номер задачи от 1 до 3.")
 
@@ -91,9 +81,7 @@ else:
 
 
 
-
-
-
+                                Задача 5
 
 import re
 def find(text):
@@ -105,7 +93,7 @@ text = input()
 result = find(text)
 print(*result)
 
-
+Даты 15 апреля 2021 и 14 мая 2022 года связаны между собой, а также 21 августа 2024
 
 
 
@@ -162,20 +150,18 @@ else:
                         Задача 9
 
 def main():
-    # Чтение списка строк с клавиатуры
-    num_strings = int(input("Введите количество строк: "))
+    NumStr = int(input("Введите количество строк: "))
     strings = []
-    for i in range(num_strings):
-        string = input(f"Введите строку {i+1}: ")
+    for i in range(NumStr):
+        string = input(f"Введите строку {i + 1}: ")
         strings.append(string)
-    
-    # Упорядочиваем список строк по длине
+
     sorted_strings = sorted(strings, key=len)
-    
-    # Вывод отсортированного списка строк
+
     print("\nОтсортированный список строк по длине:")
     for string in sorted_strings:
         print(string)
+
 
 if __name__ == "__main__":
     main()
@@ -190,19 +176,16 @@ if __name__ == "__main__":
                       Задача 10
 
 def main():
-    # Чтение списка строк с клавиатуры
-    num_strings = int(input("Введите количество строк: "))
+    numStr = int(input("Введите количество строк: "))
     strings = []
-    for i in range(num_strings):
-        string = input(f"Введите строку {i+1}: ")
+    for i in range(numStr):
+        string = input(f"Введите строку {i + 1}: ")
         strings.append(string)
-    
-    # Упорядочиваем список строк по количеству слов
-    sorted_strings = sorted(strings, key=lambda x: len(x.split()))
 
-    # Вывод отсортированного списка строк
+    sortedStr = sorted(strings, key=lambda x: len(x.split()))
+
     print("\nОтсортированный список строк по количеству слов:")
-    for string in sorted_strings:
+    for string in sortedStr:
         print(string)
 
 if __name__ == "__main__":
