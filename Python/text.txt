@@ -26,7 +26,6 @@ def find(number):
             return divisor
     return None
 
-# Пример использования функций
 number = int(input())
 print("Количество чисел, взаимно простых с", number, ":", count(number))
 print("Сумма цифр числа", number, "делящихся на 3:", divBy3(number))
