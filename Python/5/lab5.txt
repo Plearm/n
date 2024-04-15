@@ -1,0 +1,19 @@
+import re
+
+def is_valid_username(username):
+    # Паттерн для проверки имени пользователя: должно содержать только буквы, цифры и начинаться с буквы
+    pattern = r"^[a-zA-Z][a-zA-Z0-9]*$"
+    return bool(re.match(pattern, username))
+
+def get_username():
+    username = input("Введите имя пользователя: ")
+    if not is_valid_username(username):
+        raise ValueError("Некорректное имя пользователя")
+    return username
+
+# Пример использования
+try:
+    username = get_username()
+    print("Имя пользователя:", username)
+except ValueError as e:
+    print("Ошибка:", e)
