@@ -1,0 +1,66 @@
+class Triangle:
+    def __init__(self, identifier, x, y, base, height):
+        self.identifier = identifier
+        self.x = x
+        self.y = y
+        self.base = base
+        self.height = height
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def is_include(self, other):
+        # Проверяем, содержится ли other внутри текущего треугольника
+        if (other.x >= self.x and other.x <= self.x + self.base and
+            other.y >= self.y and other.y <= self.y + self.height):
+            return True
+        return False
+
+class Tetragon:
+    def __init__(self, identifier, x, y, width, height):
+        self.identifier = identifier
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def is_include(self, other):
+        # Проверяем, содержится ли other внутри текущего четырехугольника
+        if (other.x >= self.x and other.x <= self.x + self.width and
+            other.y >= self.y and other.y <= self.y + self.height):
+            return True
+        return False
+
+# Функция для ввода данных о треугольнике с клавиатуры
+def input_triangle():
+    identifier = input("Введите идентификатор треугольника: ")
+    x = int(input("Введите координату X центра треугольника: "))
+    y = int(input("Введите координату Y центра треугольника: "))
+    base = int(input("Введите длину основания треугольника: "))
+    height = int(input("Введите высоту треугольника: "))
+    return Triangle(identifier, x, y, base, height)
+
+# Функция для ввода данных о четырехугольнике с клавиатуры
+def input_tetragon():
+    identifier = input("Введите идентификатор четырехугольника: ")
+    x = int(input("Введите координату X центра четырехугольника: "))
+    y = int(input("Введите координату Y центра четырехугольника: "))
+    width = int(input("Введите ширину четырехугольника: "))
+    height = int(input("Введите высоту четырехугольника: "))
+    return Tetragon(identifier, x, y, width, height)
+
+# Создание объектов и взаимодействие с пользователем
+print("Введите данные о треугольнике:")
+triangle = input_triangle()
+
+print("\nВведите данные о четырехугольнике:")
+tetragon = input_tetragon()
+
+# Проверяем включение
+print("\nПроверка включения:")
+print("Треугольник содержит четырехугольник:", triangle.is_include(tetragon))
