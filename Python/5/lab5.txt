@@ -32,7 +32,6 @@ def Name():
         raise ValueError("Некорректное имя пользователя")
     return name
 
-# Пример использования
 try:
     name = Name()
     print("Имя пользователя:", name)
