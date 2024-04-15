@@ -30,7 +30,7 @@ def find_coprime_divisor(number):
     return None
 
 # Пример использования функций
-number = 123456
+number = int(input())
 print("Количество чисел, взаимно простых с", number, ":", count_coprimes(number))
 print("Сумма цифр числа", number, "делящихся на 3:", digit_sum_divisible_by_3(number))
 print("Делитель числа", number, ", взаимно простой с суммой цифр:", find_coprime_divisor(number))
