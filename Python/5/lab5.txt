@@ -17,3 +17,24 @@ try:
     print("Имя пользователя:", username)
 except ValueError as e:
     print("Ошибка:", e)
+
+
+
+import re
+
+def ProverkaName(name):
+    all = r"^[a-zA-Z][a-zA-Z0-9]*$"
+    return bool(re.match(all, name))
+
+def Name():
+    name = input("Введите имя пользователя: ")
+    if not ProverkaName(name):
+        raise ValueError("Некорректное имя пользователя")
+    return name
+
+# Пример использования
+try:
+    name = Name()
+    print("Имя пользователя:", name)
+except ValueError as e:
+    print("Ошибка:", e)
