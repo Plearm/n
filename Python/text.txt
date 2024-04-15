@@ -92,20 +92,18 @@ else:
 
 
 
-import re
 
-def find_dates(text):
-    """
-    Находит все даты в формате "день месяца год" в тексте.
-    """
-    pattern = r'\b\d{1,2}\s(?:января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s\d{4}\b'
-    dates = re.findall(pattern, text)
+
+
+import re
+def find(text):
+    pos = r'\b\d{1,2}\s(?:января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s\d{4}\b'
+    dates = re.findall(pos, text)
     return dates
 
-# Пример использования функции
-text = "Сегодня 31 февраля 2007 года и 15 июля 2023 года."
-result = find_dates(text)
-print(result)
+text = input()
+result = find(text)
+print(*result)
 
 
 
