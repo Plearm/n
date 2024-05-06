@@ -29,3 +29,6 @@ print(f"Количество совместных вхождений {word1} и 
 Количество вхождений слово1: 3
 Количество вхождений слово2: 1
 Количество совместных вхождений слово1 и слово2: 1
+
+
+https://docs.yandex.ru/docs/view?url=ya-disk-public%3A%2F%2FhlpeHArah7ghPpfMHw0y%2Bl1hllRZ5w5c50uN7IesKOQJLWRVqgeFiz4uY0BkTayCq%2FJ6bpmRyOJonT3VoXnDag%3D%3D%3A%2F%D0%9B%D0%A04.pdf&name=%D0%9B%D0%A04.pdf&nosw=1
