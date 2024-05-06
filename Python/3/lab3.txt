@@ -192,3 +192,96 @@ tetragon.move(dx, dy)
 # Проверка включения после перемещения
 print("\nПроверка включения после перемещения:")
 print("Треугольник содержит четырехугольник:", triangle.is_include(tetragon))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Triangle:
+    def __init__(self, identifier, x, y, base, height):
+        self.identifier = identifier
+        self.x = x
+        self.y = y
+        self.base = base
+        self.height = height
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def is_include(self, other):
+        # Проверяем, содержится ли other внутри текущего треугольника
+        # Для упрощения предполагаем, что треугольник содержит точку, если она лежит внутри его основания
+        if not isinstance(other, Tetragon):
+            raise TypeError("Параметр other должен быть объектом класса Tetragon")
+        if (other.x >= self.x and other.x <= self.x + self.base and
+            other.y >= self.y and other.y <= self.y + self.height):
+            return True
+        return False
+
+class Tetragon:
+    def __init__(self, identifier, x, y, width, height):
+        self.identifier = identifier
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def is_include(self, other):
+        # Проверяем, содержится ли other внутри текущего четырехугольника
+        if not isinstance(other, Triangle):
+            raise TypeError("Параметр other должен быть объектом класса Triangle")
+        if (other.x >= self.x and other.x <= self.x + self.width and
+            other.y >= self.y and other.y <= self.y + self.height):
+            return True
+        return False
+
+# Создание объектов треугольников
+triangle1 = Triangle("T1", 0, 0, 5, 4)
+triangle2 = Triangle("T2", 2, 2, 6, 3)
+
+# Создание объектов четырехугольников
+tetragon1 = Tetragon("T1", 1, 1, 3, 2)
+tetragon2 = Tetragon("T2", 4, 4, 4, 4)
+
+try:
+    # Ввод данных о перемещении
+    dx_tri = int(input("Введите смещение по оси X для треугольника: "))
+    dy_tri = int(input("Введите смещение по оси Y для треугольника: "))
+    dx_tet = int(input("Введите смещение по оси X для четырехугольника: "))
+    dy_tet = int(input("Введите смещение по оси Y для четырехугольника: "))
+
+    # Перемещение объектов
+    triangle1.move(dx_tri, dy_tri)
+    triangle2.move(dx_tri, dy_tri)
+    tetragon1.move(dx_tet, dy_tet)
+    tetragon2.move(dx_tet, dy_tet)
+
+    # Проверка включения после перемещения
+    print("Проверка включения после перемещения:")
+    print("Треугольник 1 содержит четырехугольник 1:", triangle1.is_include(tetragon1))
+    print("Треугольник 1 содержит четырехугольник 2:", triangle1.is_include(tetragon2))
+    print("Треугольник 2 содержит четырехугольник 1:", triangle2.is_include(tetragon1))
+    print("Треугольник 2 содержит четырехугольник 2:", triangle2.is_include(tetragon2))
+
+except ValueError:
+    print("Неверный формат ввода. Пожалуйста, введите целые числа для смещения.")
+except TypeError as e:
+    print("Ошибка типа:", e)
