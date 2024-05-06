@@ -103,27 +103,20 @@ print(*result)
 
 import os
 
-def find_used_latin_chars(text):
-    """
-    Находит все строчные символы латиницы, используемые в строке.
-    """
+def find(text):
+
     latin_chars = set(char for char in text if char.islower() and char.isascii())
     return sorted(latin_chars)
 
-def count_unique_latin_chars(text):
-    """
-    Подсчитывает количество задействованных символов латиницы в строке без учета дубликатов.
-    """
+def count(text):
+
     latin_chars = set(char for char in text if char.islower() and char.isascii())
     return len(latin_chars)
 
-def find_filename_without_extension(file_path):
-    """
-    Находит имя файла без расширения в строке с путем к файлу.
-    """
+def file(file_path):
+
     return os.path.splitext(os.path.basename(file_path))[0]
 
-# Предложение пользователю выбрать задачу
 print("Выберите задачу, которую вы хотите решить:")
 print("1) Найти все строчные символы латиницы, используемые в строке.")
 print("2) Подсчитать количество задействованных символов латиницы в строке без учета дубликатов.")
@@ -131,16 +124,15 @@ print("3) Найти имя файла без расширения в строк
 
 choice = input("Введите номер выбранной задачи (1, 2 или 3): ")
 
-# Обработка выбора пользователя
 if choice == '1':
     text = input("Введите строку для поиска строчных символов латиницы: ")
-    print("Строчные символы латиницы, используемые в строке:", find_used_latin_chars(text))
+    print("Строчные символы латиницы, используемые в строке:", find(text))
 elif choice == '2':
     text = input("Введите строку для подсчета задействованных символов латиницы: ")
-    print("Количество задействованных символов латиницы в строке без учета дубликатов:", count_unique_latin_chars(text))
+    print("Количество задействованных символов латиницы в строке без учета дубликатов:", count(text))
 elif choice == '3':
     file_path = input("Введите путь к файлу: ")
-    print("Имя файла без расширения:", find_filename_without_extension(file_path))
+    print("Имя файла без расширения:", file(file_path))
 else:
     print("Неверный выбор. Пожалуйста, введите номер задачи от 1 до 3.")
 
