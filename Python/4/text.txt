@@ -1,36 +1,26 @@
-with open("C:/Users/Username/Documents/text.txt", "r", encoding="utf-8") as file:
-    # Читаем текст из файла
-    text = file.read()
+def count(filename, word1, word2):
+    with open("C:/Users/s0171994/Desktop/file.txt", 'r', encoding='utf-8') as file:
+        text = file.read().lower()
+    print("Текст из файла:")
+    print(text)
 
-# Печатаем считанный текст для проверки
-print("Текст из файла:")
-print(text)
+    w1 = text.count(word1.lower())
+    w2 = text.count(word2.lower())
 
-
-
-
-
-def count_word_occurrences(filename, word1, word2):
-    with open(filename, 'r', encoding='utf-8') as file:
-        text = file.read().lower()  # Преобразуем текст в нижний регистр для учёта регистра слов
-
-    occurrences_word1 = text.count(word1.lower())
-    occurrences_word2 = text.count(word2.lower())
-
-    # Разбиваем текст на слова и проверяем совместные вхождения word1 и word2
     words = text.split()
-    occurrences_together = sum(1 for i in range(len(words) - 1) if words[i] == word1.lower() and words[i + 1] == word2.lower())
+    tog = sum(1 for i in range(len(words) - 1) if words[i] == word1.lower() and words[i + 1] == word2.lower())
 
-    return occurrences_word1, occurrences_word2, occurrences_together
+    return w1, w2, tog
 
 filename = "text.txt"
 word1 = "слово1"
 word2 = "слово2"
 
-result = count_word_occurrences(filename, word1, word2)
+result = count(filename, word1, word2)
 print(f"Количество вхождений {word1}: {result[0]}")
 print(f"Количество вхождений {word2}: {result[1]}")
 print(f"Количество совместных вхождений {word1} и {word2}: {result[2]}")
+
 
 
 
