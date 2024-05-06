@@ -1,0 +1,76 @@
+# Функция для чтения данных из файла
+def read_data(filename):
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+        N, K, V = map(int, lines[0].split())
+        data = [list(map(int, line.split())) for line in lines[1:]]
+    return N, K, V, data
+
+# Функция для определения минимальных затрат на доставку бензина
+def min_delivery_cost(N, K, V, data):
+    min_cost = float('inf')
+    for i in range(N):
+        station_km, station_fuel = data[i]
+        distance = min(abs(station_km - j) for j in range(1, K + 1))
+        cost = distance * V + station_fuel
+        if cost < min_cost:
+            min_cost = cost
+    return min_cost
+
+# Чтение данных из файлов
+N_a, K_a, V_a, data_a = read_data("27-123a.txt")
+N_b, K_b, V_b, data_b = read_data("27-123b.txt")
+
+# Определение минимальных затрат на доставку бензина для файлов A и B
+min_cost_a = min_delivery_cost(N_a, K_a, V_a, data_a)
+min_cost_b = min_delivery_cost(N_b, K_b, V_b, data_b)
+
+# Вывод результатов
+print("Ответ для файла A:", min_cost_a)
+print("Ответ для файла B:", min_cost_b)
+
+
+
+
+
+
+
+
+
+def read_input(filename):
+    with open(filename, 'r') as file:
+        data = file.readlines()
+    return data
+
+def calculate_total_cost(stations, ring_length, tank_volume):
+    min_cost = float('inf')
+    for i in range(len(stations)):
+        cost = 0
+        for j in range(len(stations)):
+            distance = abs(stations[j][0] - stations[i][0])
+            cost += min(distance, ring_length - distance) * stations[j][1]
+        min_cost = min(min_cost, cost)
+    return min_cost
+
+def main():
+    data_a = read_input("27-123a.txt")
+    data_b = read_input("27-123b.txt")
+
+    # Обработка данных из файла A
+    n_a, k_a, v_a = map(int, data_a[0].split())
+    stations_a = [list(map(int, line.split())) for line in data_a[1:]]
+
+    # Обработка данных из файла B
+    n_b, k_b, v_b = map(int, data_b[0].split())
+    stations_b = [list(map(int, line.split())) for line in data_b[1:]]
+
+    # Вычисление минимальных затрат для файла A
+    min_cost_a = calculate_total_cost(stations_a, k_a, v_a)
+
+    # Вычисление минимальных затрат для файла B
+    min_cost_b = calculate_total_cost(stations_b, k_b, v_b)
+
+    print(min_cost_a, min_cost_b)
+
+if __name__ == "__main__":
+    main()
