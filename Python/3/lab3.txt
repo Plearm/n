@@ -64,3 +64,131 @@ tetragon = input_tetragon()
 # Проверяем включение
 print("\nПроверка включения:")
 print("Треугольник содержит четырехугольник:", triangle.is_include(tetragon))
+
+
+
+
+
+
+
+
+
+
+class Triangle:
+    def __init__(self, identifier, x, y, base, height):
+        self.identifier = identifier
+        self.x = x
+        self.y = y
+        self.base = base
+        self.height = height
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def is_include(self, other):
+        # Проверяем, содержится ли other внутри текущего треугольника
+        # Для упрощения предполагаем, что треугольник содержит точку, если она лежит внутри его основания
+        if (other.x >= self.x and other.x <= self.x + self.base and
+            other.y >= self.y and other.y <= self.y + self.height):
+            return True
+        return False
+
+class Tetragon:
+    def __init__(self, identifier, x, y, width, height):
+        self.identifier = identifier
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def is_include(self, other):
+        # Проверяем, содержится ли other внутри текущего четырехугольника
+        if (other.x >= self.x and other.x <= self.x + self.width and
+            other.y >= self.y and other.y <= self.y + self.height):
+            return True
+        return False
+
+# Пример использования классов
+triangle1 = Triangle("T1", 0, 0, 5, 4)
+triangle2 = Triangle("T2", 2, 2, 6, 3)
+tetragon1 = Tetragon("T1", 1, 1, 3, 2)
+tetragon2 = Tetragon("T2", 4, 4, 4, 4)
+
+triangle1.move(1, 1)
+tetragon1.move(-1, -1)
+
+print(triangle1.is_include(tetragon1))  # Ожидаем True, так как triangle1 содержит tetragon1
+print(triangle1.is_include(tetragon2))  # Ожидаем False, так как triangle1 не содержит tetragon2
+print(triangle2.is_include(tetragon1))  # Ожидаем False, так как triangle2 не содержит tetragon1
+
+
+
+
+
+
+
+
+
+
+
+class Triangle:
+    def __init__(self, identifier, x, y, base, height):
+        self.identifier = identifier
+        self.x = x
+        self.y = y
+        self.base = base
+        self.height = height
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def is_include(self, other):
+        # Проверяем, содержится ли other внутри текущего треугольника
+        if (other.x >= self.x and other.x <= self.x + self.base and
+            other.y >= self.y and other.y <= self.y + self.height):
+            return True
+        return False
+
+class Tetragon:
+    def __init__(self, identifier, x, y, width, height):
+        self.identifier = identifier
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def is_include(self, other):
+        # Проверяем, содержится ли other внутри текущего четырехугольника
+        if (other.x >= self.x and other.x <= self.x + self.width and
+            other.y >= self.y and other.y <= self.y + self.height):
+            return True
+        return False
+
+# Создание объектов и ввод данных о перемещении
+triangle = Triangle("T1", 0, 0, 5, 4)
+tetragon = Tetragon("T1", 1, 1, 3, 2)
+
+dx = int(input("Введите смещение по оси X: "))
+dy = int(input("Введите смещение по оси Y: "))
+
+# Проверка включения до перемещения
+print("Проверка включения до перемещения:")
+print("Треугольник содержит четырехугольник:", triangle.is_include(tetragon))
+
+# Перемещение объектов
+triangle.move(dx, dy)
+tetragon.move(dx, dy)
+
+# Проверка включения после перемещения
+print("\nПроверка включения после перемещения:")
+print("Треугольник содержит четырехугольник:", triangle.is_include(tetragon))
