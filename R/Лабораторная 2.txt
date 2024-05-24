@@ -1,0 +1,191 @@
+getwd()  # Эта команда покажет текущую рабочую директорию		
+
+
+		1) 
+
+Загрузить необходимые пакеты: 
+install.packages("writexl")
+library(writexl)
+
+
+# Генерация случайных данных
+num_entries <- 50
+books <- paste("Книга", 1:num_entries)
+cost <- sample(500:2000, num_entries, replace = TRUE)  # Стоимость в рублях
+pages <- sample(100:1000, num_entries, replace = TRUE)  # Объем в страницах
+registration_date <- sample(seq(as.Date('2024-01-01'), as.Date('2024-12-31'), by = "day"), num_entries, replace = TRUE)
+sale_date <- sample(seq(as.Date('2024-01-01'), as.Date('2024-12-31'), by = "day"), num_entries, replace = TRUE)
+
+# Создание таблицы данных
+bookshop_data <- data.frame(
+  Книга = books,
+  Стоимость_руб = cost,
+  Объем_страниц = pages,
+  Регистрация_поступлений = registration_date,
+  Регистрация_продаж = sale_date
+)
+
+# Сохранение данных в файл Excel
+write_xlsx(bookshop_data, path = "bookshop_data.xlsx")
+
+# Выводим первые строки таблицы для проверки
+head(bookshop_data)
+
+
+
+		2)
+# Установка начального значения для генерации случайных чисел
+set.seed(42)
+
+# Генерация случайных данных
+num_entries <- 50
+books <- paste("Книга", 1:num_entries)
+cost <- sample(500:2000, num_entries, replace = TRUE)  # Стоимость в рублях
+pages <- sample(100:1000, num_entries, replace = TRUE)  # Объем в страницах
+registration_date <- sample(seq(as.Date('2024-01-01'), as.Date('2024-12-31'), by = "day"), num_entries, replace = TRUE)
+sale_date <- sample(seq(as.Date('2024-01-01'), as.Date('2024-12-31'), by = "day"), num_entries, replace = TRUE)
+
+# Создание таблицы данных
+bookshop_data <- data.frame(
+  Книга = books,
+  Стоимость_руб = cost,
+  Объем_страниц = pages,
+  Регистрация_поступлений = registration_date,
+  Регистрация_продаж = sale_date
+)
+
+# Сохранение данных в файл Excel
+write_xlsx(bookshop_data, path = "bookshop_data.xlsx")
+
+# Выводим первые строки таблицы для проверки
+head(bookshop_data)
+
+# Выбор столбца для работы
+vector <- bookshop_data$Стоимость_руб
+
+# 1. Найти произведение элементов вектора
+product_vector <- prod(vector)
+cat("Произведение элементов вектора:", product_vector, "\n")
+
+# 2. Найти наибольшее значение
+max_value <- max(vector)
+cat("Наибольшее значение вектора:", max_value, "\n")
+
+# 3. Найти номер наименьшего элемента
+min_index <- which.min(vector)
+cat("Номер наименьшего элемента вектора:", min_index, "\n")
+
+# 4. Найти медиану вектора
+median_value <- median(vector)
+cat("Медиана вектора:", median_value, "\n")
+
+# 5. Получить новый вектор - перестановку элементов в обратном порядке исходного вектора
+reversed_vector <- rev(vector)
+cat("Вектор в обратном порядке:", reversed_vector, "\n")
+
+# 6. Получить новый вектор, каждый элемент которого равен наибольшему элементу от начала вектора до текущего элемента
+max_to_current <- sapply(1:length(vector), function(i) max(vector[1:i]))
+cat("Новый вектор с наибольшими элементами до текущего:", max_to_current, "\n")
+
+
+
+		3)
+# Установка начального значения для генерации случайных чисел
+set.seed(42)
+
+# Генерация случайных данных
+num_entries <- 50
+books <- paste("Книга", 1:num_entries)
+cost <- sample(500:2000, num_entries, replace = TRUE)  # Стоимость в рублях
+pages <- sample(100:1000, num_entries, replace = TRUE)  # Объем в страницах
+registration_date <- sample(seq(as.Date('2024-01-01'), as.Date('2024-12-31'), by = "day"), num_entries, replace = TRUE)
+sale_date <- sample(seq(as.Date('2024-01-01'), as.Date('2024-12-31'), by = "day"), num_entries, replace = TRUE)
+
+# Создание таблицы данных
+bookshop_data <- data.frame(
+  Книга = books,
+  Стоимость_руб = cost,
+  Объем_страниц = pages,
+  Регистрация_поступлений = registration_date,
+  Регистрация_продаж = sale_date
+)
+
+# Сохранение данных в файл Excel
+write_xlsx(bookshop_data, path = "bookshop_data.xlsx")
+
+# Выводим первые строки таблицы для проверки
+head(bookshop_data)
+
+# Выбор столбца для работы
+vector <- bookshop_data$Стоимость_руб
+
+# 1. Найти наименьший элемент
+min_element <- min(vector)
+cat("Наименьший элемент вектора:", min_element, "\n")
+
+# 2. Найти индекс наибольшего элемента
+max_index <- which.max(vector)
+cat("Индекс наибольшего элемента вектора:", max_index, "\n")
+
+# 3. Найти среднее арифметическое элементов и округлить до 2-х знаков
+mean_value <- round(mean(vector), 2)
+cat("Среднее арифметическое элементов вектора:", mean_value, "\n")
+
+# 4. Выполнить кумулятивное сложение и умножение на первых пяти элементах
+cumsum_first_five <- cumsum(vector[1:5])
+cumprod_first_five <- cumprod(vector[1:5])
+cat("Кумулятивное сложение первых пяти элементов:", cumsum_first_five, "\n")
+cat("Кумулятивное умножение первых пяти элементов:", cumprod_first_five, "\n")
+
+# 5. Отсортировать вектор в порядке убывания и вывести значения с округлением до двух знаков после запятой
+sorted_vector <- sort(vector, decreasing = TRUE)
+rounded_sorted_vector <- round(sorted_vector, 2)
+cat("Отсортированный вектор в порядке убывания (с округлением до 2 знаков):", rounded_sorted_vector, "\n")
+
+# 6. Построить новый вектор, каждый элемент которого является произведением от начала до текущего элемента
+cumulative_product_vector <- cumprod(vector)
+rounded_cumulative_product_vector <- round(cumulative_product_vector, 1)
+cat("Новый вектор произведений от начала до текущего элемента (с округлением до 1 знака):", rounded_cumulative_product_vector, "\n")
+
+
+
+		4)
+ # Генерация случайных данных
+num_entries <- 50
+books <- paste("Книга", 1:num_entries)
+cost <- sample(500:2000, num_entries, replace = TRUE)  # Стоимость в рублях
+pages <- sample(100:1000, num_entries, replace = TRUE)  # Объем в страницах
+registration_date <- sample(seq(as.Date('2024-01-01'), as.Date('2024-12-31'), by = "day"), num_entries, replace = TRUE)
+sale_date <- sample(seq(as.Date('2024-01-01'), as.Date('2024-12-31'), by = "day"), num_entries, replace = TRUE)
+
+# Создание таблицы данных
+bookshop_data <- data.frame(
+  Книга = books,
+  Стоимость_руб = cost,
+  Объем_страниц = pages,
+  Регистрация_поступлений = registration_date,
+  Регистрация_продаж = sale_date
+)
+
+# Сохранение данных в файл Excel
+write_xlsx(bookshop_data, path = "bookshop_data.xlsx")
+
+# Выводим первые строки таблицы для проверки
+head(bookshop_data)
+
+
+# Выбираем два столбца для работы
+vector1 <- bookshop_data$Стоимость_руб
+vector2 <- bookshop_data$Объем_страниц
+
+# 1. Находим среднее арифметическое сумму этих векторов
+mean_sum <- mean(vector1 + vector2)
+cat("Среднее арифметическое суммы векторов:", mean_sum, "\n")
+
+# 2. Вычисляем сумму исходных векторов
+sum_vector <- vector1 + vector2
+
+# Создаем новый вектор - сумму исходных векторов в порядке убывания значений элементов
+sorted_sum_vector <- sort(sum_vector, decreasing = TRUE)
+cat("Новый вектор - сумма исходных векторов в порядке убывания значений элементов:", sorted_sum_vector, "\n")
+

@@ -1,0 +1,157 @@
+		Индивидуальная: 
+
+
+# Определение функции для вычисления дохода банка
+calculate_bank_income <- function(X_days) {
+  principal <- 10000  # Основная сумма ссуды
+  annual_interest_rate <- 0.30  # Годовая процентная ставка
+  days_in_year <- 360  # Количество дней в году для расчета простых процентов
+  
+  # Вычисляем проценты за X дней
+  interest <- principal * annual_interest_rate * (X_days / days_in_year)
+  
+  return(interest)
+}
+
+# Создание вектора из 30 сгенерированных значений X (количество дней)
+X_days <- sample(30:360, 30, replace = TRUE)
+
+# Вычисление дохода банка для каждого значения X
+income <- sapply(X_days, calculate_bank_income)
+
+# Построение столбиковой диаграммы
+barplot(income, names.arg = X_days, xlab = "Количество дней", ylab = "Доход банка (руб.)", col = "skyblue", main = "Доход банка от ссуды")
+
+
+
+
+
+		Задания: 
+
+2) 
+# Определяем функцию g(a, b)
+g <- function(a, b) {
+  result <- (a^2 + b^2 - 4 * a * b) / (a^2 + 5 * a * b + 3 * b^2 + 4 * a - b)
+  return(result)
+}
+
+# Заданные значения s и t
+s <- 2.5
+t <- 3.7
+
+# Вычисляем результат выражения g(1.2, s) + g(t, s) - g(2s - 1, st)
+result <- g(1.2, s) + g(t, s) - g(2 * s - 1, s * t)
+
+# Выводим результат
+cat("Результат выражения g(1.2, s) + g(t, s) - g(2s - 1, st) равен:", result, "\n")
+
+
+4) 
+# Создание матрицы
+matrix_data <- matrix(c(5, 10, 15, 20, 25, 30, 35, 40, 45), nrow = 3, byrow = TRUE)
+print("Исходная матрица:")
+print(matrix_data)
+
+# Функция для вычисления различных статистических показателей
+custom_function <- function(x) {
+  max_value <- max(x)
+  min_value <- min(x)
+  mean_value <- mean(x)
+  median_value <- median(x)
+  product_value <- prod(x)
+  
+  result <- c(max_value, min_value, mean_value, median_value, product_value)
+  return(result)
+}
+
+# Применяем функцию к строкам и столбцам матрицы
+row_stats <- apply(matrix_data, 1, custom_function)  # для строк
+col_stats <- apply(matrix_data, 2, custom_function)  # для столбцов
+
+# Выводим результаты
+cat("Статистические показатели для строк:\n")
+print(row_stats)
+cat("\nСтатистические показатели для столбцов:\n")
+print(col_stats)
+
+# Определяем собственную функцию
+custom_function <- function(x) {
+  max_value <- max(x)
+  min_value <- min(x)
+  mean_value <- mean(x)
+  median_value <- median(x)
+  product_value <- prod(x)
+  
+  # Дополнительное вычисление, например, сумма всех элементов
+  sum_value <- sum(x)
+  
+  result <- c(max_value, min_value, mean_value, median_value, product_value, sum_value)
+  return(result)
+}
+
+# Применяем функцию к строкам и столбцам матрицы
+row_stats <- apply(matrix_data, 1, custom_function)  # для строк
+col_stats <- apply(matrix_data, 2, custom_function)  # для столбцов
+
+# Выводим результаты
+cat("Статистические показатели для строк (с дополнительной суммой):\n")
+print(row_stats)
+cat("\nСтатистические показатели для столбцов (с дополнительной суммой):\n")
+print(col_stats)
+
+
+
+5) 
+# Заданные векторы
+integer_vector <- c(3, 7, 12, 18, 25)
+vector1 <- c(2, 4, 6, 8, 10)
+vector2 <- c(1, 3, 5, 7, 9)
+
+# Функция для вычисления произведения нечетных элементов вектора
+product_odd <- function(x) {
+  odd_elements <- x[x %% 2 != 0]
+  product <- prod(odd_elements)
+  return(product)
+}
+
+# Функция для вычисления суммы последних цифр элементов вектора
+sum_last_digits <- function(x) {
+  last_digits <- x %% 10
+  sum_last <- sum(last_digits)
+  return(sum_last)
+}
+
+# Функция для вычисления количества элементов вектора, у которых две последние цифры равны
+count_matching_last_digits <- function(x) {
+  last_two_digits <- x %% 100
+  count <- sum(last_two_digits %/% 10 == last_two_digits %% 10)
+  return(count)
+}
+
+# Вычисляем статистические показатели для трех векторов с помощью sapply()
+statistical_results <- sapply(list(integer_vector, vector1, vector2), function(x) {
+  max_value <- max(x)
+  min_value <- min(x)
+  mean_value <- mean(x)
+  median_value <- median(x)
+  product_value <- prod(x)
+  return(c(max_value, min_value, mean_value, median_value, product_value))
+})
+
+# Выводим статистические результаты
+print("Статистические показатели для трех векторов:")
+print(statistical_results)
+
+# Вычисляем результаты, используя собственные функции
+result_product_odd <- sapply(list(integer_vector, vector1, vector2), product_odd)
+result_sum_last_digits <- sapply(list(integer_vector, vector1, vector2), sum_last_digits)
+result_count_matching_last_digits <- sapply(list(integer_vector, vector1, vector2), count_matching_last_digits)
+
+# Выводим результаты собственных функций
+cat("\nРезультаты собственных функций:\n")
+cat("1) Произведение нечетных элементов векторов:\n")
+print(result_product_odd)
+cat("2) Сумма последних цифр элементов векторов:\n")
+print(result_sum_last_digits)
+cat("3) Количество элементов векторов, у которых две последние цифры равны:\n")
+print(result_count_matching_last_digits)

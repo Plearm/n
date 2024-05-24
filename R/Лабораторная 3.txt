@@ -1,0 +1,245 @@
+		Индивидуальная: 
+
+
+# Генерируем случайный вектор
+set.seed(42)  # Для воспроизводимости результатов
+vec <- sample(100:999, 10)
+print(vec)
+
+# Находим первый четный элемент
+first_even <- vec[vec %% 2 == 0][1]
+print(paste("Первый четный элемент:", first_even))
+
+# Ищем номер первого элемента, две последние цифры которого больше первого четного элемента
+index <- which(sapply(vec, function(x) (x %% 100) > first_even))[1]
+
+if (!is.na(index)) {
+  cat("Номер первого подходящего элемента:", index, "\n")
+} else {
+  cat("Нет подходящего элемента в векторе.\n")
+}
+
+# Используем тот же вектор
+print(vec)
+
+# Находим индекс первого четного элемента
+first_even_index <- which(vec %% 2 == 0)[1]
+
+if (!is.na(first_even_index)) {
+  # Суммируем элементы, расположенные после первого четного элемента
+  sum_after_even <- sum(vec[(first_even_index + 1):length(vec)])
+  cat("Сумма элементов, расположенных после первого четного элемента:", sum_after_even, "\n")
+} else {
+  cat("В векторе нет четных элементов.\n")
+}
+
+
+
+
+
+		Задания:
+
+		1)
+ random_number <- sample(1000:9999, 1)
+cat("Случайное четырехзначное число:", random_number, "\n")
+
+# Преобразование числа в вектор цифр
+digits <- as.numeric(unlist(strsplit(as.character(random_number), "")))
+
+# Проверка, четное ли число
+if (random_number %% 2 == 0) {
+  # Если число четное, вывести сумму его цифр
+  sum_digits <- sum(digits)
+  cat("Сумма цифр:", sum_digits, "\n")
+} else {
+  # Если число нечетное, определить, какая цифра больше: первая или последняя
+  first_digit <- digits[1]
+  last_digit <- digits[length(digits)]
+  if (first_digit > last_digit) {
+    cat("Первая цифра больше:", first_digit, "\n")
+  } else if (first_digit < last_digit) {
+    cat("Последняя цифра больше:", last_digit, "\n")
+  } else {
+    cat("Первая и последняя цифры равны:", first_digit, "\n")
+  }
+}
+
+
+		2) 
+# Создание таблицы исходных данных
+bookshop_data <- data.frame(
+  Книга = c("Война и мир", "Преступление и наказание", "Гарри Поттер и философский камень", "Мастер и Маргарита"),
+  Стоимость_руб = c(1000, 800, 1200, 900),
+  Объем_страниц = c(1200, 600, 400, 700),
+  Регистрация_поступлений = as.Date(c("2024-05-01", "2024-05-03", "2024-05-05", "2024-05-07")),
+  Регистрация_продаж = as.Date(c("2024-05-10", "2024-05-15", "2024-05-20", "2024-05-25"))
+)
+
+# Преобразуем числовые столбцы в один вектор
+numerical_data <- c(bookshop_data$Стоимость_руб, bookshop_data$Объем_страниц)
+
+# 1. Найти сумму положительных не кратных 5 элементов
+positive_non_multiple_5 <- numerical_data[numerical_data > 0 & numerical_data %% 5 != 0]
+sum_positive_non_multiple_5 <- sum(positive_non_multiple_5)
+cat("Сумма положительных не кратных 5 элементов:", sum_positive_non_multiple_5, "\n")
+
+# 2. Найти произведение порядковых номеров элементов с последней цифрой 5
+indices_ending_5 <- which(numerical_data %% 10 == 5)
+product_indices_ending_5 <- prod(indices_ending_5)
+cat("Произведение порядковых номеров элементов с последней цифрой 5:", product_indices_ending_5, "\n")
+
+# 3. Найти номер элемента, имеющего первое нечетное значение
+first_odd_index <- which(numerical_data %% 2 != 0)[1]
+cat("Номер элемента, имеющего первое нечетное значение:", first_odd_index, "\n")
+
+# 4. Найти номер элемента, имеющего последнее значение, делящееся нацело на 7
+last_divisible_by_7_index <- tail(which(numerical_data %% 7 == 0), n = 1)
+cat("Номер элемента, имеющего последнее значение, делящееся нацело на 7:", last_divisible_by_7_index, "\n")
+
+
+
+		3)
+# Создание таблицы исходных данных
+bookshop_data <- data.frame(
+  Книга = c("Война и мир", "Преступление и наказание", "Гарри Поттер и философский камень", "Мастер и Маргарита"),
+  Стоимость_руб = c(1000, 800, 1200, 900),
+  Объем_страниц = c(1200, 600, 400, 700),
+  Регистрация_поступлений = as.Date(c("2024-05-01", "2024-05-03", "2024-05-05", "2024-05-07")),
+  Регистрация_продаж = as.Date(c("2024-05-10", "2024-05-15", "2024-05-20", "2024-05-25"))
+)
+
+# Преобразуем числовые столбцы в один вектор
+numerical_data <- c(bookshop_data$Стоимость_руб, bookshop_data$Объем_страниц)
+
+# 1. Найти произведение элементов вектора, оканчивающихся на чётную цифру
+even_ending_elements <- numerical_data[numerical_data %% 10 %in% c(0, 2, 4, 6, 8)]
+product_even_ending_elements <- prod(even_ending_elements)
+cat("Произведение элементов, оканчивающихся на чётную цифру:", product_even_ending_elements, "\n")
+
+# Добавим несколько нулевых элементов для демонстрации второго запроса
+numerical_data_with_zeros <- c(1000, 800, 0, 1200, 600, 400, 0, 900, 1200)
+
+# 2. Найти сумму элементов вектора, расположенных между первым и последним нулевыми элементами
+first_zero_index <- which(numerical_data_with_zeros == 0)[1]
+last_zero_index <- tail(which(numerical_data_with_zeros == 0), n = 1)
+
+if (!is.na(first_zero_index) & !is.na(last_zero_index) & first_zero_index < last_zero_index) {
+  elements_between_zeros <- numerical_data_with_zeros[(first_zero_index + 1):(last_zero_index - 1)]
+  sum_between_zeros <- sum(elements_between_zeros)
+} else {
+  sum_between_zeros <- 0  # Если нет элементов между нулями, сумма будет 0
+}
+cat("Сумма элементов, расположенных между первым и последним нулевыми элементами:", sum_between_zeros, "\n")
+
+
+
+		4)
+# Создание таблицы исходных данных
+bookshop_data <- data.frame(
+  Книга = c("Война и мир", "Преступление и наказание", "Гарри Поттер и философский камень", "Мастер и Маргарита"),
+  Стоимость_руб = c(1000, 800, 1200, 900),
+  Объем_страниц = c(1200, 600, 400, 700),
+  Регистрация_поступлений = as.Date(c("2024-05-01", "2024-05-03", "2024-05-05", "2024-05-07")),
+  Регистрация_продаж = as.Date(c("2024-05-10", "2024-05-15", "2024-05-20", "2024-05-25"))
+)
+
+# Преобразуем числовые столбцы в один вектор
+numerical_data <- c(bookshop_data$Стоимость_руб, bookshop_data$Объем_страниц)
+
+# 1. Найти сумму элементов вектора, сумма двух последних цифр у которых больше 10
+sum_last_two_digits <- function(x) {
+  last_two_digits <- x %% 100
+  tens <- last_two_digits %/% 10
+  units <- last_two_digits %% 10
+  return(tens + units)
+}
+
+elements_sum_last_two_digits_gt_10 <- numerical_data[sapply(numerical_data, sum_last_two_digits) > 10]
+sum_elements_last_two_digits_gt_10 <- sum(elements_sum_last_two_digits_gt_10)
+cat("Сумма элементов, у которых сумма двух последних цифр больше 10:", sum_elements_last_two_digits_gt_10, "\n")
+
+# Добавим несколько отрицательных элементов для демонстрации второго запроса
+numerical_data_with_negatives <- c(1000, 800, -120, 1200, 600, -400, 900, 1200)
+
+# 2. Найти сумму элементов вектора, расположенных между первым и последним отрицательными элементами
+first_negative_index <- which(numerical_data_with_negatives < 0)[1]
+last_negative_index <- tail(which(numerical_data_with_negatives < 0), n = 1)
+
+if (!is.na(first_negative_index) & !is.na(last_negative_index) & first_negative_index < last_negative_index) {
+  elements_between_negatives <- numerical_data_with_negatives[(first_negative_index + 1):(last_negative_index - 1)]
+  sum_between_negatives <- sum(elements_between_negatives)
+} else {
+  sum_between_negatives <- 0  # Если нет элементов между отрицательными элементами, сумма будет 0
+}
+cat("Сумма элементов, расположенных между первым и последним отрицательными элементами:", sum_between_negatives, "\n")
+
+
+		
+		5)
+# Установка начального значения для генерации случайного числа
+set.seed(42)
+
+# Генерация случайного целого положительного числа
+random_number <- sample(1e3:1e6, 1)  # Например, число в диапазоне от 1000 до 1 000 000
+cat("Случайное число:", random_number, "\n")
+
+# Преобразование числа в вектор цифр
+digits <- as.numeric(unlist(strsplit(as.character(random_number), "")))
+
+# 1. Найти сумму четных цифр числа
+even_digits <- digits[digits %% 2 == 0]
+sum_even_digits <- sum(even_digits)
+cat("Сумма четных цифр:", sum_even_digits, "\n")
+
+# 2. Найти наибольшую цифру числа
+max_digit <- max(digits)
+cat("Наибольшая цифра:", max_digit, "\n")
+
+# 3. Найти наименьшую нечетную цифру числа
+odd_digits <- digits[digits %% 2 != 0]
+if (length(odd_digits) > 0) {
+  min_odd_digit <- min(odd_digits)
+} else {
+  min_odd_digit <- NA  # Если нет нечетных цифр, вернуть NA
+}
+cat("Наименьшая нечетная цифра:", min_odd_digit, "\n")
+
+# 4. Верно ли, что в числе нет цифр 2 и 3
+no_two_and_three <- !any(digits %in% c(2, 3))
+cat("В числе нет цифр 2 и 3:", no_two_and_three, "\n")
+
+# 5. Верно ли, что в числе все цифры четные
+all_even_digits <- all(digits %% 2 == 0)
+cat("Все цифры в числе четные:", all_even_digits, "\n")
+
+# 6. Верно ли, что в числе цифр 5 больше, чем четных цифр
+count_fives <- sum(digits == 5)
+count_even_digits <- sum(digits %% 2 == 0)
+more_fives_than_even <- count_fives > count_even_digits
+cat("Цифр 5 больше, чем четных цифр:", more_fives_than_even, "\n")
+ 
+
+
+		6)
+# Создание таблицы исходных данных
+bookshop_data <- data.frame(
+  Книга = c("Война и мир", "Преступление и наказание", "Гарри Поттер и философский камень", "Мастер и Маргарита"),
+  Стоимость_руб = c(1000, 800, 1200, 900),
+  Объем_страниц = c(1200, 600, 400, 700)
+)
+
+# Извлечение двух векторов из таблицы
+vector1 <- bookshop_data$Стоимость_руб
+vector2 <- bookshop_data$Объем_страниц
+
+# Выполнение сложения двух векторов
+sum_vector <- vector1 + vector2
+
+# Умножение результата на константу (например, на 2)
+constant <- 2
+result_vector <- sum_vector * constant
+
+# Вывод элементов вектора графически с помощью команды plot(x)
+plot(result_vector, type = "b", col = "blue", xlab = "Индекс", ylab = "Значение", main = "Графическое представление вектора")
+
+

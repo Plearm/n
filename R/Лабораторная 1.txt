@@ -1,0 +1,152 @@
+1) # Генерируем случайное четырехзначное число
+num <- sample(1000:9999, 1)
+print(num)
+
+# Выводим цифры числа
+thousands <- num %/% 1000
+hundreds <- (num %/% 100) %% 10
+tens <- (num %/% 10) %% 10
+units <- num %% 10
+
+cat("Цифры числа:", thousands, hundreds, tens, units, "\n")
+
+
+2) # Генерируем случайное трехзначное число
+num <- sample(100:999, 1)
+print(num)
+
+# Вычисляем произведение цифр
+hundreds <- num %/% 100
+tens <- (num %/% 10) %% 10
+units <- num %% 10
+
+product <- hundreds * tens * units
+cat("Произведение цифр числа:", product, "\n")
+
+3) # Генерируем случайное четырехзначное число
+num <- sample(1000:9999, 1)
+print(num)
+
+# Извлекаем цифры
+thousands <- num %/% 1000
+hundreds <- (num %/% 100) %% 10
+tens <- (num %/% 10) %% 10
+units <- num %% 10
+
+# Формируем новое число
+new_num <- units * 1000 + hundreds * 100 + tens * 10 + thousands
+cat("Новое число:", new_num, "\n")
+
+
+
+4) # Генерируем случайное пятизначное число
+num <- sample(10000:99999, 1)
+print(num)
+
+# Извлекаем первую и последнюю цифры
+first_digit <- num %/% 10000
+last_digit <- num %% 10
+
+product <- first_digit * last_digit
+cat("Произведение первой и последней цифры:", product, "\n")
+
+
+
+5) # Генерируем случайное пятизначное число
+num <- sample(10000:99999, 1)
+print(num)
+
+# Извлекаем цифры и формируем новое число
+first <- num %/% 10000
+second <- (num %/% 1000) %% 10
+third <- (num %/% 100) %% 10
+fourth <- (num %/% 10) %% 10
+fifth <- num %% 10
+
+reversed_num <- fifth * 10000 + fourth * 1000 + third * 100 + second * 10 + first
+cat("Число в обратном порядке:", reversed_num, "\n")
+
+
+
+6) # Генерируем случайное четырехзначное число
+num <- sample(1000:9999, 1)
+print(num)
+
+# Извлекаем цифры
+first <- num %/% 1000
+second <- (num %/% 100) %% 10
+third <- (num %/% 10) %% 10
+fourth <- num %% 10
+
+# Вычисляем сумму крайних цифр и квадрат третьей цифры
+sum_extremes <- first + fourth
+square_third <- third^2
+
+cat("Сумма крайних цифр:", sum_extremes, "\n")
+cat("Квадрат третьей цифры:", square_third, "\n")
+
+if (sum_extremes > square_third) {
+  cat("Сумма крайних цифр больше квадрата третьей цифры.\n")
+} else {
+  cat("Квадрат третьей цифры больше суммы крайних цифр.\n")
+}
+
+
+7) # Генерируем случайное шестизначное число
+num <- sample(100000:999999, 1)
+print(num)
+
+# Проверяем, является ли число палиндромом
+num_str <- as.character(num)
+if (num_str == rev(num_str)) {
+  cat("Число является палиндромом.\n")
+} else {
+  cat("Число не является палиндромом.\n")
+}
+
+
+
+8) # Генерируем два случайных целых числа
+num1 <- sample(-1000:1000, 1)
+num2 <- sample(-1000:1000, 1)
+print(c(num1, num2))
+
+# Проверяем условия и выполняем действия
+if ((num1 > 0 && num2 < 0 || num1 < 0 && num2 > 0) && (num1 %% 2 != num2 %% 2)) {
+  result <- num1^2 + num2^2
+  cat("Сумма квадратов чисел:", result, "\n")
+} else if (num1 %% 5 == 0 || num2 %% 5 == 0) {
+  result <- num1^3 + num2^3
+  cat("Сумма кубов чисел:", result, "\n")
+} else if (num1 %% 1000 == 111 || num2 %% 1000 == 111) {
+  num1 <- num1 * 2
+  num2 <- num2 * 2
+  cat("Удвоенные числа:", num1, num2, "\n")
+}
+
+
+
+9) # Генерация векторов
+vec1 <- c(1, 2, 3, 4, 5)
+vec2 <- seq(10, 20, by = 2)
+vec3 <- runif(5, min = 0, max = 100)
+
+# Анализ векторов
+cat("Вектор 1:", vec1, "\n")
+cat("Сумма:", sum(vec1), "\n")
+cat("Произведение:", prod(vec1), "\n")
+cat("Наибольший элемент:", max(vec1), "\n")
+cat("Наименьший элемент:", min(vec1), "\n")
+
+cat("Вектор 2:", vec2, "\n")
+cat("Сумма:", sum(vec2), "\n")
+cat("Произведение:", prod(vec2), "\n")
+cat("Наибольший элемент:", max(vec2), "\n")
+cat("Наименьший элемент:", min(vec2), "\n")
+
+cat("Вектор 3:", vec3, "\n")
+cat("Сумма:", sum(vec3), "\n")
+cat("Произведение:", prod(vec3), "\n")
+cat("Наибольший элемент:", max(vec3), "\n")
+cat("Наименьший элемент:", min(vec3), "\n")
+
