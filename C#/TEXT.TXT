@@ -1,1 +1,105 @@
+Происходит ошибка в программе. private staring connString = ConfigurationManager.ConnectionStrings["PostgresConnectionString"].ConnectionString. Он подчёркивает ConfigurationManager
 
+
+
+
+
+namespace SalesManagementApp
+{
+    partial class Form1
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.btnClients = new System.Windows.Forms.Button();
+            this.btnProducts = new System.Windows.Forms.Button();
+            this.btnContracts = new System.Windows.Forms.Button();
+            this.btnContractDetails = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // btnClients
+            // 
+            this.btnClients.Location = new System.Drawing.Point(25, 21);
+            this.btnClients.Name = "btnClients";
+            this.btnClients.Size = new System.Drawing.Size(168, 80);
+            this.btnClients.TabIndex = 0;
+            this.btnClients.Text = "Клиенты";
+            this.btnClients.UseVisualStyleBackColor = true;
+            this.btnClients.Click += new System.EventHandler(this.btnClients_Click);
+            // 
+            // btnProducts
+            // 
+            this.btnProducts.Location = new System.Drawing.Point(25, 129);
+            this.btnProducts.Name = "btnProducts";
+            this.btnProducts.Size = new System.Drawing.Size(168, 78);
+            this.btnProducts.TabIndex = 1;
+            this.btnProducts.Text = "Продукты";
+            this.btnProducts.UseVisualStyleBackColor = true;
+            this.btnProducts.Click += new System.EventHandler(this.btnProducts_Click);
+            // 
+            // btnContracts
+            // 
+            this.btnContracts.Location = new System.Drawing.Point(232, 21);
+            this.btnContracts.Name = "btnContracts";
+            this.btnContracts.Size = new System.Drawing.Size(151, 80);
+            this.btnContracts.TabIndex = 2;
+            this.btnContracts.Text = "Контракты";
+            this.btnContracts.UseVisualStyleBackColor = true;
+            this.btnContracts.Click += new System.EventHandler(this.btnContracts_Click);
+            // 
+            // btnContractDetails
+            // 
+            this.btnContractDetails.Location = new System.Drawing.Point(232, 129);
+            this.btnContractDetails.Name = "btnContractDetails";
+            this.btnContractDetails.Size = new System.Drawing.Size(151, 78);
+            this.btnContractDetails.TabIndex = 3;
+            this.btnContractDetails.Text = "Детали";
+            this.btnContractDetails.UseVisualStyleBackColor = true;
+            this.btnContractDetails.Click += new System.EventHandler(this.btnContractDetails_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(459, 281);
+            this.Controls.Add(this.btnContractDetails);
+            this.Controls.Add(this.btnContracts);
+            this.Controls.Add(this.btnProducts);
+            this.Controls.Add(this.btnClients);
+            this.Name = "Form1";
+            this.Text = "Form1";
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button btnClients;
+        private System.Windows.Forms.Button btnProducts;
+        private System.Windows.Forms.Button btnContracts;
+        private System.Windows.Forms.Button btnContractDetails;
+    }
+}
