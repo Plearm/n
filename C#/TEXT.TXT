@@ -1,6 +1,597 @@
 Происходит ошибка в программе. private staring connString = ConfigurationManager.ConnectionStrings["PostgresConnectionString"].ConnectionString. Он подчёркивает ConfigurationManager
 
+ChatGPT
 
+Я работаю в Visual studio на языке C# в Windows Forms приложении
+ChatGPT
+Отлично! Visual Studio и язык C# вместе с Windows Forms позволяют создавать мощные и функциональные настольные приложения. Чем я могу вам помочь? Возможно, у вас есть конкретные вопросы или задачи, с которыми вы столкнулись?
+
+
+
+
+
+База данных должна быть реализована в PostgreSQL. Приложение в C# Windows Forms. БД обычно по заданию состоит из 4-х таблиц: 1) Products (товары) {product_id(PK), name, price} 2)Clients (клиенты) {client_id(PK), name, contract_info} 3)Contracts(контракты) {contract_id(PK), client_id(FK), contract_date, общая сумма, Тип оплаты(наличные/безналичные), Предоплата(да/нет),Отгрузки(Да/Нет)} 4)ContractDetails {contract_detail_id(PK), contract_id(FK), product_id(FK), quantity(количество товара),total_amount(Общая сумма)}. В приложении должен быть реализован следующий функционал: отображение данных каждой из таблиц, возможность добавления/изменения/удаления записей из таблицы, построение заданного отчета, вывод необходимых данных в MS Excel. При изменении данных, мы их изменяем, а не вводим заново. При изменении/удалении действие происходит с выделенной строкой в таблице. Интерфейс пользователя на русском языке. При добавлении данных в связанные таблицы (товары в содержимое накладной, клиенты в накладную), необходимо сделать их выбор из списка наименований(не ID), созданного на основании БД. В самих связанных таблицах отображать необходимо наименования, а не ID. Две главные таблицы приложения должны находиться на одной форме и быть связаны. И теперь само задание: Предприятие реализует товары клиентам на условиях предоплаты. В договорах указываются товары, их количество и сумма. Оплата товаров может осуществляться как в наличном виде, путем внесения в кассу, так и перечислением. За период для выбранных клиентов сформировать материальный отчет по товарам положенных к отгрузке, не не отгруженных с указанием количество и сумм(экспорт в MS Excel). За период для выбранных товаров нарисовать столбиковую диаграмму, отображающую соотношение количества законтрактованных в отгруженных товаров
+ChatGPT
+Отлично, у вас есть детализированное задание. Давайте разберем основные шаги и необходимые компоненты для реализации вашего Windows Forms приложения на C# с базой данных PostgreSQL.
+
+Шаг 1: Настройка проекта
+Создание проекта: Откройте Visual Studio и создайте новый проект Windows Forms App (.NET Framework).
+Шаг 2: Настройка базы данных PostgreSQL
+Установка PostgreSQL: Убедитесь, что PostgreSQL установлен на вашем компьютере.
+Создание базы данных: Создайте базу данных и таблицы на PostgreSQL.
+sql
+Копировать код
+CREATE TABLE Products (
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE Clients (
+    client_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    contract_info TEXT
+);
+
+CREATE TABLE Contracts (
+    contract_id SERIAL PRIMARY KEY,
+    client_id INT REFERENCES Clients(client_id),
+    contract_date DATE NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    payment_type VARCHAR(50) NOT NULL,
+    prepayment BOOLEAN NOT NULL,
+    shipment BOOLEAN NOT NULL
+);
+
+CREATE TABLE ContractDetails (
+    contract_detail_id SERIAL PRIMARY KEY,
+    contract_id INT REFERENCES Contracts(contract_id),
+    product_id INT REFERENCES Products(product_id),
+    quantity INT NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL
+);
+Шаг 3: Подключение к базе данных в C#
+Установка пакета Npgsql: В вашем проекте установите пакет Npgsql для работы с PostgreSQL.
+
+sh
+Копировать код
+Install-Package Npgsql
+Настройка подключения:
+
+csharp
+Копировать код
+using Npgsql;
+
+string connString = "Host=localhost;Username=postgres;Password=yourpassword;Database=yourdatabase";
+
+using (var conn = new NpgsqlConnection(connString))
+{
+    conn.Open();
+    // Your database operations
+}
+Шаг 4: Разработка интерфейса пользователя
+Основная форма: Создайте форму с элементами управления для отображения таблиц. Используйте DataGridView для отображения данных таблиц.
+Компоненты для управления:
+TextBox и ComboBox для ввода данных.
+Button для выполнения действий (добавление, изменение, удаление).
+BindingSource для связывания данных с DataGridView.
+Шаг 5: Реализация CRUD операций
+Загрузка данных в DataGridView:
+
+csharp
+Копировать код
+private void LoadProducts()
+{
+    using (var conn = new NpgsqlConnection(connString))
+    {
+        conn.Open();
+        string query = "SELECT product_id, name, price FROM Products";
+        NpgsqlDataAdapter da = new NpgsqlDataAdapter(query, conn);
+        DataTable dt = new DataTable();
+        da.Fill(dt);
+        dataGridViewProducts.DataSource = dt;
+    }
+}
+Добавление, изменение и удаление данных:
+
+csharp
+Копировать код
+private void AddProduct(string name, decimal price)
+{
+    using (var conn = new NpgsqlConnection(connString))
+    {
+        conn.Open();
+        string query = "INSERT INTO Products (name, price) VALUES (@name, @price)";
+        using (var cmd = new NpgsqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("name", name);
+            cmd.Parameters.AddWithValue("price", price);
+            cmd.ExecuteNonQuery();
+        }
+    }
+}
+
+private void UpdateProduct(int productId, string name, decimal price)
+{
+    using (var conn = new NpgsqlConnection(connString))
+    {
+        conn.Open();
+        string query = "UPDATE Products SET name=@name, price=@price WHERE product_id=@product_id";
+        using (var cmd = new NpgsqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("product_id", productId);
+            cmd.Parameters.AddWithValue("name", name);
+            cmd.Parameters.AddWithValue("price", price);
+            cmd.ExecuteNonQuery();
+        }
+    }
+}
+
+private void DeleteProduct(int productId)
+{
+    using (var conn = new NpgsqlConnection(connString))
+    {
+        conn.Open();
+        string query = "DELETE FROM Products WHERE product_id=@product_id";
+        using (var cmd = new NpgsqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("product_id", productId);
+            cmd.ExecuteNonQuery();
+        }
+    }
+}
+Шаг 6: Создание отчетов и экспорт в Excel
+Создание отчета: Для создания отчетов используйте LINQ или SQL-запросы для выборки данных.
+
+Экспорт в Excel: Для экспорта данных в Excel используйте библиотеку ClosedXML.
+
+sh
+Копировать код
+Install-Package ClosedXML
+csharp
+Копировать код
+using ClosedXML.Excel;
+
+private void ExportToExcel(DataTable dt, string filePath)
+{
+    using (var workbook = new XLWorkbook())
+    {
+        var worksheet = workbook.Worksheets.Add(dt, "Report");
+        workbook.SaveAs(filePath);
+    }
+}
+Шаг 7: Диаграммы
+Для построения диаграмм используйте компонент Chart из System.Windows.Forms.DataVisualization.Charting.
+
+Заключение
+Этот проект включает в себя множество аспектов разработки, от работы с базой данных до взаимодействия с пользователем и создания отчетов. По мере необходимости вы можете добавлять дополнительные функции и улучшения. Не стесняйтесь задавать вопросы, если вам нужна помощь с конкретными частями проекта. Удачи в разработке!
+
+
+
+
+
+На главной форме должны быть созданы 4 кнопки: Клиенты, Товары и тд. И дай полное пошаговое руководство
+ChatGPT
+Хорошо, давайте создадим пошаговое руководство для реализации вашего Windows Forms приложения на C# с использованием базы данных PostgreSQL.
+
+Шаг 1: Создание проекта
+Создайте новый проект: Откройте Visual Studio и создайте новый проект типа "Windows Forms App (.NET Framework)".
+Назовите проект: Дайте проекту подходящее имя, например SalesManagementApp.
+Шаг 2: Настройка базы данных PostgreSQL
+Установка PostgreSQL: Убедитесь, что PostgreSQL установлен на вашем компьютере.
+
+Создание базы данных и таблиц: Используйте pgAdmin или командную строку для создания базы данных и таблиц.
+
+sql
+Копировать код
+CREATE DATABASE sales_management;
+\c sales_management
+
+CREATE TABLE Products (
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE Clients (
+    client_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    contract_info TEXT
+);
+
+CREATE TABLE Contracts (
+    contract_id SERIAL PRIMARY KEY,
+    client_id INT REFERENCES Clients(client_id),
+    contract_date DATE NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    payment_type VARCHAR(50) NOT NULL,
+    prepayment BOOLEAN NOT NULL,
+    shipment BOOLEAN NOT NULL
+);
+
+CREATE TABLE ContractDetails (
+    contract_detail_id SERIAL PRIMARY KEY,
+    contract_id INT REFERENCES Contracts(contract_id),
+    product_id INT REFERENCES Products(product_id),
+    quantity INT NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL
+);
+Шаг 3: Подключение к базе данных в C#
+Установка пакета Npgsql: В вашем проекте установите пакет Npgsql для работы с PostgreSQL.
+
+Откройте Tools > NuGet Package Manager > Package Manager Console.
+Введите команду: Install-Package Npgsql.
+Настройка подключения:
+
+В проекте создайте файл App.config для хранения строки подключения.
+xml
+Копировать код
+<configuration>
+    <connectionStrings>
+        <add name="PostgresConnectionString" 
+             connectionString="Host=localhost;Username=postgres;Password=yourpassword;Database=sales_management" 
+             providerName="Npgsql" />
+    </connectionStrings>
+</configuration>
+Шаг 4: Разработка интерфейса пользователя
+Создание главной формы: В Form1, добавьте четыре кнопки для навигации: "Клиенты", "Товары", "Контракты", "Детали контрактов".
+
+csharp
+Копировать код
+public partial class Form1 : Form
+{
+    public Form1()
+    {
+        InitializeComponent();
+    }
+
+    private void InitializeComponent()
+    {
+        this.btnClients = new System.Windows.Forms.Button();
+        this.btnProducts = new System.Windows.Forms.Button();
+        this.btnContracts = new System.Windows.Forms.Button();
+        this.btnContractDetails = new System.Windows.Forms.Button();
+        this.SuspendLayout();
+        // 
+        // btnClients
+        // 
+        this.btnClients.Location = new System.Drawing.Point(12, 12);
+        this.btnClients.Name = "btnClients";
+        this.btnClients.Size = new System.Drawing.Size(100, 23);
+        this.btnClients.TabIndex = 0;
+        this.btnClients.Text = "Клиенты";
+        this.btnClients.UseVisualStyleBackColor = true;
+        this.btnClients.Click += new System.EventHandler(this.btnClients_Click);
+        // 
+        // btnProducts
+        // 
+        this.btnProducts.Location = new System.Drawing.Point(12, 41);
+        this.btnProducts.Name = "btnProducts";
+        this.btnProducts.Size = new System.Drawing.Size(100, 23);
+        this.btnProducts.TabIndex = 1;
+        this.btnProducts.Text = "Товары";
+        this.btnProducts.UseVisualStyleBackColor = true;
+        this.btnProducts.Click += new System.EventHandler(this.btnProducts_Click);
+        // 
+        // btnContracts
+        // 
+        this.btnContracts.Location = new System.Drawing.Point(12, 70);
+        this.btnContracts.Name = "btnContracts";
+        this.btnContracts.Size = new System.Drawing.Size(100, 23);
+        this.btnContracts.TabIndex = 2;
+        this.btnContracts.Text = "Контракты";
+        this.btnContracts.UseVisualStyleBackColor = true;
+        this.btnContracts.Click += new System.EventHandler(this.btnContracts_Click);
+        // 
+        // btnContractDetails
+        // 
+        this.btnContractDetails.Location = new System.Drawing.Point(12, 99);
+        this.btnContractDetails.Name = "btnContractDetails";
+        this.btnContractDetails.Size = new System.Drawing.Size(100, 23);
+        this.btnContractDetails.TabIndex = 3;
+        this.btnContractDetails.Text = "Детали контрактов";
+        this.btnContractDetails.UseVisualStyleBackColor = true;
+        this.btnContractDetails.Click += new System.EventHandler(this.btnContractDetails_Click);
+        // 
+        // Form1
+        // 
+        this.ClientSize = new System.Drawing.Size(284, 261);
+        this.Controls.Add(this.btnContractDetails);
+        this.Controls.Add(this.btnContracts);
+        this.Controls.Add(this.btnProducts);
+        this.Controls.Add(this.btnClients);
+        this.Name = "Form1";
+        this.ResumeLayout(false);
+    }
+
+    private System.Windows.Forms.Button btnClients;
+    private System.Windows.Forms.Button btnProducts;
+    private System.Windows.Forms.Button btnContracts;
+    private System.Windows.Forms.Button btnContractDetails;
+
+    private void btnClients_Click(object sender, EventArgs e)
+    {
+        var clientsForm = new ClientsForm();
+        clientsForm.ShowDialog();
+    }
+
+    private void btnProducts_Click(object sender, EventArgs e)
+    {
+        var productsForm = new ProductsForm();
+        productsForm.ShowDialog();
+    }
+
+    private void btnContracts_Click(object sender, EventArgs e)
+    {
+        var contractsForm = new ContractsForm();
+        contractsForm.ShowDialog();
+    }
+
+    private void btnContractDetails_Click(object sender, EventArgs e)
+    {
+        var contractDetailsForm = new ContractDetailsForm();
+        contractDetailsForm.ShowDialog();
+    }
+}
+Создание форм для каждой таблицы: Добавьте формы ClientsForm, ProductsForm, ContractsForm и ContractDetailsForm. Каждая форма будет содержать DataGridView для отображения данных и элементы управления для добавления, изменения и удаления записей.
+
+Шаг 5: Реализация CRUD операций
+Загрузка данных в DataGridView:
+
+csharp
+Копировать код
+public partial class ClientsForm : Form
+{
+    private string connString = ConfigurationManager.ConnectionStrings["PostgresConnectionString"].ConnectionString;
+
+    public ClientsForm()
+    {
+        InitializeComponent();
+        LoadClients();
+    }
+
+    private void LoadClients()
+    {
+        using (var conn = new NpgsqlConnection(connString))
+        {
+            conn.Open();
+            string query = "SELECT client_id, name, contract_info FROM Clients";
+            NpgsqlDataAdapter da = new NpgsqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            dataGridViewClients.DataSource = dt;
+        }
+    }
+}
+Добавление, изменение и удаление данных:
+
+csharp
+Копировать код
+private void AddClient(string name, string contractInfo)
+{
+    using (var conn = new NpgsqlConnection(connString))
+    {
+        conn.Open();
+        string query = "INSERT INTO Clients (name, contract_info) VALUES (@name, @contract_info)";
+        using (var cmd = new NpgsqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("name", name);
+            cmd.Parameters.AddWithValue("contract_info", contractInfo);
+            cmd.ExecuteNonQuery();
+        }
+    }
+}
+
+private void UpdateClient(int clientId, string name, string contractInfo)
+{
+    using (var conn = new NpgsqlConnection(connString))
+    {
+        conn.Open();
+        string query = "UPDATE Clients SET name=@name, contract_info=@contract_info WHERE client_id=@client_id";
+        using (var cmd = new NpgsqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("client_id", clientId);
+            cmd.Parameters.AddWithValue("name", name);
+            cmd.Parameters.AddWithValue("contract_info", contractInfo);
+            cmd.ExecuteNonQuery();
+        }
+    }
+}
+
+private void DeleteClient(int clientId)
+{
+    using (var conn = new NpgsqlConnection(connString))
+    {
+        conn.Open();
+        string query = "DELETE FROM Clients WHERE client_id=@client_id";
+        using (var cmd = new NpgsqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("client_id", clientId);
+            cmd.ExecuteNonQuery();
+        }
+    }
+}
+Шаг 6: Создание отчетов и экспорт в Excel
+Создание отчетов: Для создания отчетов используйте LINQ или SQL-запросы для выборки данных. Пример запроса для товаров, не отгруженных в указанный период:
+
+csharp
+Копировать код
+private DataTable GetReport(DateTime startDate, DateTime endDate)
+{
+    using (var conn = new NpgsqlConnection(connString))
+    {
+        conn.Open();
+        string query = @"
+            SELECT p.name, cd.quantity, cd.total_amount
+            FROM ContractDetails cd
+            JOIN Products p ON cd.product_id = p.product_id
+            JOIN Contracts c ON cd.contract_id = c.contract_id
+            WHERE c.contract_date BETWEEN @start_date AND @end_date
+              AND c.shipment = FALSE";
+        using (var cmd = new NpgsqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("start_date", startDate);
+            cmd.Parameters.AddWithValue("end_date", endDate);
+            NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            return dt;
+        }
+    }
+}
+Экспорт в Excel: Для экспорта данных в Excel используйте библиотеку ClosedXML.
+
+csharp
+Копировать код
+private void ExportToExcel(DataTable dt, string filePath)
+{
+    using (var workbook = new XLWorkbook())
+    {
+        var worksheet = workbook.Worksheets.Add(dt, "Report");
+        workbook.SaveAs(filePath);
+    }
+}
+Шаг 7: Диаграммы
+Для построения диаграмм используйте компонент Chart из System.Windows.Forms.DataVisualization.Charting.
+
+Добавление компонента Chart: Добавьте компонент Chart на форму и настройте его свойства.
+Заполнение данных для диаграммы:
+csharp
+Копировать код
+private void LoadChartData(DateTime startDate, DateTime endDate)
+{
+    var reportData = GetReport(startDate, endDate);
+
+    chart1.Series.Clear();
+    var series = new Series("Количество");
+    series.ChartType = SeriesChartType.Column;
+
+    foreach (DataRow row in reportData.Rows)
+    {
+        series.Points.AddXY(row["name"], row["quantity"]);
+    }
+
+    chart1.Series.Add(series);
+}
+Заключение
+Этот пошаговый план охватывает основные этапы создания Windows Forms приложения с использованием C# и PostgreSQL. Вы можете добавлять дополнительные функции и улучшения по мере необходимости. Если у вас возникнут вопросы по конкретным частям проекта, не стесняйтесь спрашивать. Удачи в разработке!
+
+
+
+
+
+Распиши подробнее шаг 2. Как создать БД и тд
+ChatGPT
+Давайте подробно рассмотрим шаг 2: создание базы данных PostgreSQL и таблиц.
+
+Шаг 2: Настройка базы данных PostgreSQL
+1. Установка PostgreSQL
+Скачивание и установка PostgreSQL:
+
+Перейдите на официальный сайт PostgreSQL.
+Выберите вашу операционную систему (Windows, macOS, Linux) и следуйте инструкциям для установки PostgreSQL.
+Во время установки обратите внимание на шаг, где нужно задать пароль для пользователя postgres. Запомните этот пароль, так как он понадобится для подключения к базе данных.
+Установка pgAdmin (опционально):
+
+pgAdmin - это графическая утилита для управления базами данных PostgreSQL. Она обычно устанавливается вместе с PostgreSQL, но вы можете также скачать её отдельно с официального сайта pgAdmin.
+2. Создание базы данных и таблиц
+Использование pgAdmin
+Запуск pgAdmin:
+
+Откройте pgAdmin и подключитесь к вашему серверу PostgreSQL, используя пароль, который вы задали при установке.
+Создание базы данных:
+
+Щелкните правой кнопкой мыши на Databases и выберите Create > Database....
+Назовите базу данных, например sales_management, и нажмите Save.
+Создание таблиц:
+
+Щелкните правой кнопкой мыши на вашей новой базе данных sales_management, выберите Query Tool.
+Введите SQL-запросы для создания таблиц и выполните их, нажав на кнопку Execute (иконка молнии).
+sql
+Копировать код
+CREATE TABLE Products (
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE Clients (
+    client_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    contract_info TEXT
+);
+
+CREATE TABLE Contracts (
+    contract_id SERIAL PRIMARY KEY,
+    client_id INT REFERENCES Clients(client_id),
+    contract_date DATE NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    payment_type VARCHAR(50) NOT NULL,
+    prepayment BOOLEAN NOT NULL,
+    shipment BOOLEAN NOT NULL
+);
+
+CREATE TABLE ContractDetails (
+    contract_detail_id SERIAL PRIMARY KEY,
+    contract_id INT REFERENCES Contracts(contract_id),
+    product_id INT REFERENCES Products(product_id),
+    quantity INT NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL
+);
+Использование командной строки (psql)
+Запуск psql:
+
+Откройте командную строку (Command Prompt на Windows или Terminal на macOS/Linux).
+Запустите psql, введя следующую команду и используя пароль, который вы задали при установке:
+sh
+Копировать код
+psql -U postgres
+Создание базы данных:
+
+Введите следующую команду для создания базы данных:
+sql
+Копировать код
+CREATE DATABASE sales_management;
+Подключение к новой базе данных:
+
+Подключитесь к новой базе данных:
+sql
+Копировать код
+\c sales_management
+Создание таблиц:
+
+Введите следующие команды для создания таблиц:
+sql
+Копировать код
+CREATE TABLE Products (
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE Clients (
+    client_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    contract_info TEXT
+);
+
+CREATE TABLE Contracts (
+    contract_id SERIAL PRIMARY KEY,
+    client_id INT REFERENCES Clients(client_id),
+    contract_date DATE NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    payment_type VARCHAR(50) NOT NULL,
+    prepayment BOOLEAN NOT NULL,
+    shipment BOOLEAN NOT NULL
+);
+
+CREATE TABLE ContractDetails (
+    contract_detail_id SERIAL PRIMARY KEY,
+    contract_id INT REFERENCES Contracts(contract_id),
+    product_id INT REFERENCES Products(product_id),
+    quantity INT NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL
+);
 
 
 
@@ -103,3 +694,24 @@ namespace SalesManagementApp
         private System.Windows.Forms.Button btnContractDetails;
     }
 }
+
+
+
+
+CREATE TABLE Contracts (
+    contract_id SERIAL PRIMARY KEY,
+    client_id INT REFERENCES Clients(client_id),
+    contract_date DATE NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    payment_type VARCHAR(50) NOT NULL,
+    prepayment BOOLEAN NOT NULL,
+    shipment BOOLEAN NOT NULL
+);
+
+CREATE TABLE ContractDetails (
+    contract_detail_id SERIAL PRIMARY KEY,
+    contract_id INT REFERENCES Contracts(contract_id),
+    product_id INT REFERENCES Products(product_id),
+    quantity INT NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL
+);
