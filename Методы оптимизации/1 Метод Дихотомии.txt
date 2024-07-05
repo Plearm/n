@@ -1,0 +1,186 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Определение функции
+def f(x):
+    return x**2 - 6*x + 12
+
+# Метод дихотомии
+def dichotomy_method(f, a, b, tol=1e-5, delta=1e-6):
+    steps = []
+    n_iterations = 0  # Добавляем счетчик итераций
+    while (b - a) / 2 > tol:
+        x1 = (a + b - delta) / 2
+        x2 = (a + b + delta) / 2
+        steps.append((a, b, x1, x2, f(x1), f(x2)))
+        if f(x1) < f(x2):
+            b = x2
+        else:
+            a = x1
+        n_iterations += 1  # Увеличиваем счетчик на каждой итерации
+    return (a + b) / 2, steps, n_iterations
+
+# Интервал и точность
+a = 1
+b = 11
+tol = 1e-5
+
+# Нахождение точки минимума
+xmin, steps, n_iterations = dichotomy_method(f, a, b, tol)
+
+# Значение функции в точке минимума
+fmin = f(xmin)
+
+# График функции и точки минимума
+x = np.linspace(a, b, 500)
+y = f(x)
+
+plt.plot(x, y, label='f(x) = x^2 - 6x + 12')
+plt.scatter([xmin], [fmin], color='red', zorder=5, label=f'Minimum at x = {xmin:.5f}')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.title('Dichotomy Method')
+plt.grid(True)
+plt.show()
+
+# Вывод шагов
+for step in steps:
+    print(f"Interval: [{step[0]:.5f}, {step[1]:.5f}], x1 = {step[2]:.5f}, x2 = {step[3]:.5f}, f(x1) = {step[4]:.5f}, f(x2) = {step[5]:.5f}")
+
+# Оценка теоретического количества итераций для сходимости
+theoretical_iterations = np.log2((b - a) / tol)
+
+print(f"\nТочка минимума: x = {xmin:.5f}")
+print(f"Значение функции в точке минимума: f(x) = {fmin:.5f}")
+print(f"Количество итераций: {n_iterations}")
+print(f"Теоретическая оценка количества итераций: {theoretical_iterations:.2f}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Определение функции
+def f(x):
+    return x**2 - 6*x + 12
+
+# Метод дихотомии
+def dichotomy_method(f, a, b, tol=1e-5, delta=1e-6):
+    steps = []
+    while (b - a) / 2 > tol:
+        x1 = (a + b - delta) / 2
+        x2 = (a + b + delta) / 2
+        steps.append((a, b, x1, x2, f(x1), f(x2)))
+        if f(x1) < f(x2):
+            b = x2
+        else:
+            a = x1
+    return (a + b) / 2, steps
+
+# Интервал и точность
+a = 1
+b = 11
+tol = 1e-5
+
+# Нахождение точки минимума
+xmin, steps = dichotomy_method(f, a, b, tol)
+
+# Значение функции в точке минимума
+fmin = f(xmin)
+
+# График функции и точки минимума
+x = np.linspace(a, b, 500)
+y = f(x)
+
+plt.plot(x, y, label='f(x) = x^2 - 6x + 12')
+plt.scatter([xmin], [fmin], color='red', zorder=5, label=f'Minimum at x = {xmin:.5f}')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.title('Dichotomy Method')
+plt.grid(True)
+plt.show()
+
+# Вывод шагов
+for step in steps:
+    print(f"Interval: [{step[0]:.5f}, {step[1]:.5f}], x1 = {step[2]:.5f}, x2 = {step[3]:.5f}, f(x1) = {step[4]:.5f}, f(x2) = {step[5]:.5f}")
+
+print(f"\nТочка минимума: x = {xmin:.5f}")
+print(f"Значение функции в точке минимума: f(x) = {fmin:.5f}")
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x):
+    return x**2 - 6*x + 12
+
+def dichotomy_method(a, b, epsilon, delta):
+    steps = []
+    while (b - a) / 2 > epsilon:
+        mid = (a + b) / 2
+        x1 = mid - delta
+        x2 = mid + delta
+        f1 = f(x1)
+        f2 = f(x2)
+        
+        if f1 < f2:
+            b = x2
+        else:
+            a = x1
+            
+        steps.append((a, b))
+    
+    return (a + b) / 2, steps
+
+a = 1
+b = 11
+epsilon = 0.5
+delta = 0.2
+
+xmin, steps = dichotomy_method(a, b, epsilon, delta)
+
+print(f"Точка минимума: {xmin}")
+print(f"Значение функции в точке минимума: {f(xmin)}")
+print(f"Конечный интервал: [{steps[-1][0]}, {steps[-1][1]}]")
+print("Метод сходится")
+
+# Построение графика
+x = np.linspace(a, b, 400)
+y = f(x)
+
+plt.plot(x, y, label='f(x)')
+plt.scatter(xmin, f(xmin), color='red', label='Minimum')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.title('Метод дихотомии')
+plt.grid(True)
+plt.show()
+

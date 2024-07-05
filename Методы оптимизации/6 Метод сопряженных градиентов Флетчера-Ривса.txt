@@ -1,0 +1,147 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import line_search
+
+# Определение функции и её градиента
+def f(x):
+    x1, x2 = x
+    return 6 * x1**2 + x2**2 - x1 * x2 + x1
+
+def gradient(x):
+    x1, x2 = x
+    df_dx1 = 12 * x1 - x2 + 1
+    df_dx2 = 2 * x2 - x1
+    return np.array([df_dx1, df_dx2])
+
+# Метод сопряженных градиентов Флетчера-Ривса
+def fletcher_reeves(f, grad, x0, constraint, learning_rate=0.01, tol=1e-6, max_iter=1000):
+    x = x0
+    steps = [x0]
+    g = grad(x)
+    d = -g
+    for i in range(max_iter):
+        alpha = line_search(f, grad, x, d)[0]
+        if alpha is None:
+            alpha = learning_rate
+        x_new = x + alpha * d
+        # Проекция на плоскость ограничений
+        x_new = projection(x_new, constraint)
+        steps.append(x_new)
+        g_new = grad(x_new)
+        beta = np.dot(g_new, g_new) / np.dot(g, g)
+        d = -g_new + beta * d
+        if np.linalg.norm(x_new - x) < tol:
+            break
+        x = x_new
+        g = g_new
+    return x, steps
+
+# Функция проекции на плоскость ограничений
+def projection(x, constraint):
+    A, b = constraint
+    return x - np.dot(A, x - b) * A.T / np.dot(A, A)
+
+# Параметры
+x0 = np.array([2.0, 1.0])
+constraint = (np.array([2.0, 3.0]), np.array([1.0]))
+
+# Нахождение точки минимума методом сопряженных градиентов Флетчера-Ривса
+xmin_fr, steps_fr = fletcher_reeves(f, gradient, x0, constraint)
+
+# Значение функции в точке минимума
+fmin_fr = f(xmin_fr)
+
+# Вывод шагов
+print("Шаги методом сопряженных градиентов Флетчера-Ривса:")
+for i, step in enumerate(steps_fr):
+    print(f"Step {i}: x = ({step[0]:.5f}, {step[1]:.5f}), f(x) = {f(step):.5f}")
+
+print(f"\nТочка минимума: x = ({xmin_fr[0]:.5f}, {xmin_fr[1]:.5f})")
+print(f"Значение функции в точке минимума: f(x) = {fmin_fr:.5f}")
+
+# Сходимость
+iterations_fr = len(steps_fr)
+print(f"\nКоличество итераций: {iterations_fr}")
+
+# График
+x = np.linspace(-1, 3, 400)
+y = np.linspace(-1, 2, 400)
+X, Y = np.meshgrid(x, y)
+Z = f([X, Y])
+
+plt.figure(figsize=(12, 6))
+cp = plt.contourf(X, Y, Z, levels=50, cmap='viridis')
+plt.colorbar(cp)
+plt.plot([s[0] for s in steps_fr], [s[1] for s in steps_fr], 'bo-', label='Conjugate Gradient Path')
+plt.title('Conjugate Gradient Method')
+plt.xlabel('x1')
+plt.ylabel('x2')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import line_search
+
+def f(x):
+    return 6 * x[0]**2 + x[1]**2 - x[0] * x[1] + x[0]
+
+def gradient(x):
+    df_dx1 = 12 * x[0] - x[1] + 1
+    df_dx2 = 2 * x[1] - x[0]
+    return np.array([df_dx1, df_dx2])
+
+def fletcher_reeves(f, grad, x0, epsilon):
+    x = x0
+    g = grad(x)
+    d = -g
+    steps = [x0]
+
+    while np.linalg.norm(g) > epsilon:
+        alpha = line_search(f, grad, x, d)[0]
+        if alpha is None:
+            alpha = 0.01  # На случай если line_search не сойдется
+        x_new = x + alpha * d
+        g_new = grad(x_new)
+        beta = np.dot(g_new, g_new) / np.dot(g, g)
+        d = -g_new + beta * d
+        x = x_new
+        g = g_new
+        steps.append(x_new)
+    
+    return x, steps
+
+x0 = np.array([2, 1])
+epsilon = 0.5
+
+xmin, steps = fletcher_reeves(f, gradient, x0, epsilon)
+
+print(f"Точка минимума: {xmin}")
+print(f"Значение функции в точке минимума: {f(xmin)}")
+print("Метод сходится" if np.linalg.norm(gradient(xmin)) < epsilon else "Метод не сходится")
+
+# Построение графика
+steps = np.array(steps)
+plt.plot(steps[:, 0], steps[:, 1], 'bo-', label='Steps')
+plt.scatter(xmin[0], xmin[1], color='red', label='Minimum')
+plt.xlabel('x1')
+plt.ylabel('x2')
+plt.legend()
+plt.title('Метод сопряженных градиентов Флетчера-Ривса')
+plt.grid(True)
+plt.show()
+

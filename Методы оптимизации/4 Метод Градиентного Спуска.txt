@@ -1,0 +1,118 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Определение функции и её градиента
+def f(x):
+    x1, x2 = x
+    return 6 * x1**2 + x2**2 - x1 * x2 + x1
+
+def gradient(x):
+    x1, x2 = x
+    df_dx1 = 12 * x1 - x2 + 1
+    df_dx2 = 2 * x2 - x1
+    return np.array([df_dx1, df_dx2])
+
+# Метод градиентного спуска
+def gradient_descent(f, grad, x0, learning_rate=0.01, tol=1e-6, max_iter=1000):
+    x = x0
+    steps = [x0]
+    for i in range(max_iter):
+        grad_val = grad(x)
+        x_new = x - learning_rate * grad_val
+        steps.append(x_new)
+        if np.linalg.norm(x_new - x) < tol:
+            break
+        x = x_new
+    return x, steps
+
+# Начальная точка
+x0 = np.array([2, 1])
+
+# Нахождение точки минимума
+xmin, steps = gradient_descent(f, gradient, x0)
+
+# Значение функции в точке минимума
+fmin = f(xmin)
+
+# График траектории
+steps = np.array(steps)
+plt.plot(steps[:, 0], steps[:, 1], 'o-', label='Gradient Descent Path')
+plt.xlabel('x1')
+plt.ylabel('x2')
+plt.title('Gradient Descent')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Вывод шагов
+for i, step in enumerate(steps):
+    print(f"Step {i}: x = ({step[0]:.5f}, {step[1]:.5f}), f(x) = {f(step):.5f}")
+
+print(f"\nТочка минимума: x = ({xmin[0]:.5f}, {xmin[1]:.5f})")
+print(f"Значение функции в точке минимума: f(x) = {fmin:.5f}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x):
+    return 6 * x[0]**2 + x[1]**2 - x[0] * x[1] + x[0]
+
+def gradient(x):
+    df_dx1 = 12 * x[0] - x[1] + 1
+    df_dx2 = 2 * x[1] - x[0]
+    return np.array([df_dx1, df_dx2])
+
+def gradient_descent(f, grad, x0, learning_rate, epsilon):
+    x = x0
+    steps = [x0]
+    while True:
+        grad_x = grad(x)
+        x_new = x - learning_rate * grad_x
+        steps.append(x_new)
+        if np.linalg.norm(grad_x) < epsilon:
+            break
+        x = x_new
+    return x, steps
+
+x0 = np.array([2, 1])
+learning_rate = 0.01
+epsilon = 0.5
+
+xmin, steps = gradient_descent(f, gradient, x0, learning_rate, epsilon)
+
+print(f"Точка минимума: {xmin}")
+print(f"Значение функции в точке минимума: {f(xmin)}")
+print("Метод сходится" if np.linalg.norm(gradient(xmin)) < epsilon else "Метод не сходится")
+
+# Построение графика
+steps = np.array(steps)
+plt.plot(steps[:, 0], steps[:, 1], 'bo-', label='Steps')
+plt.scatter(xmin[0], xmin[1], color='red', label='Minimum')
+plt.xlabel('x1')
+plt.ylabel('x2')
+plt.legend()
+plt.title('Метод градиентного спуска')
+plt.grid(True)
+plt.show()
+

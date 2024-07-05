@@ -1,0 +1,169 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Определение функции
+def f(x1, x2):
+    return 6 * x1**2 + x2**2 - x1 * x2 + x1
+
+# Генерация чисел Фибоначчи до n
+def fibonacci_numbers(n):
+    fibs = [0, 1]
+    for i in range(2, n):
+        fibs.append(fibs[-1] + fibs[-2])
+    return fibs
+
+# Метод Фибоначчи для одномерной минимизации
+def fibonacci_method(f, a, b, n, x_fixed, var_index):
+    fibs = fibonacci_numbers(n)
+    steps = []
+    for k in range(n-1, 1, -1):
+        L = b - a
+        x1 = a + (fibs[k-2] / fibs[k]) * L
+        x2 = a + (fibs[k-1] / fibs[k]) * L
+        f1 = f(x1, x_fixed) if var_index == 1 else f(x_fixed, x1)
+        f2 = f(x2, x_fixed) if var_index == 1 else f(x_fixed, x2)
+        steps.append((a, b, x1, x2, f1, f2))
+        if f1 < f2:
+            b = x2
+        else:
+            a = x1
+    return (a + b) / 2, steps
+
+# Параметры
+a = -10
+b = 10
+n = 20  # Количество итераций метода Фибоначчи
+
+# Начальная точка
+x0 = np.array([2, 1])
+x1, x2 = x0
+
+# Нахождение точки минимума по x1 при фиксированном x2
+xmin1, steps1 = fibonacci_method(f, a, b, n, x2, 1)
+x1 = xmin1
+
+# Нахождение точки минимума по x2 при фиксированном x1
+xmin2, steps2 = fibonacci_method(f, a, b, n, x1, 2)
+x2 = xmin2
+
+# Значение функции в точке минимума
+fmin = f(x1, x2)
+
+# Вывод шагов
+print("Шаги минимизации по x1 при фиксированном x2:")
+for step in steps1:
+    print(f"Interval: [{step[0]:.5f}, {step[1]:.5f}], x1 = {step[2]:.5f}, x2 = {step[3]:.5f}, f(x1, x2) = {step[4]:.5f}")
+
+print("\nШаги минимизации по x2 при фиксированном x1:")
+for step in steps2:
+    print(f"Interval: [{step[0]:.5f}, {step[1]:.5f}], x1 = {step[2]:.5f}, x2 = {step[3]:.5f}, f(x1, x2) = {step[4]:.5f}")
+
+print(f"\nТочка минимума: x = ({x1:.5f}, {x2:.5f})")
+print(f"Значение функции в точке минимума: f(x) = {fmin:.5f}")
+
+# Сходимость
+iterations1 = len(steps1)
+iterations2 = len(steps2)
+total_iterations = iterations1 + iterations2
+theoretical_iterations = n - 2  # теоретическая оценка итераций для каждого этапа
+
+print(f"\nКоличество итераций по x1: {iterations1}")
+print(f"Количество итераций по x2: {iterations2}")
+print(f"Общее количество итераций: {total_iterations}")
+print(f"Теоретическая оценка количества итераций для каждого этапа: {theoretical_iterations}")
+
+# График функции и точек минимума
+x = np.linspace(a, b, 500)
+X1, X2 = np.meshgrid(x, x)
+Z = f(X1, X2)
+
+plt.figure(figsize=(10, 6))
+cp = plt.contourf(X1, X2, Z, levels=50, cmap='viridis')
+plt.colorbar(cp)
+plt.plot([x0[0]], [x0[1]], 'ro', label='Initial Point')
+plt.plot([x1], [x2], 'go', label='Minimum Point')
+plt.title('Fibonacci Method')
+plt.xlabel('x1')
+plt.ylabel('x2')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x):
+    return x**2 - 6*x + 12
+
+def fibonacci_search(a, b, n):
+    fib = [1, 1]
+    for i in range(2, n+1):
+        fib.append(fib[-1] + fib[-2])
+    
+    k = 1
+    c = a + (b - a) * (fib[n - 2] / fib[n])
+    d = a + (b - a) * (fib[n - 1] / fib[n])
+    steps = []
+
+    while k < n - 1:
+        if f(c) < f(d):
+            b = d
+        else:
+            a = c
+        
+        c = a + (b - a) * (fib[n - k - 1] / fib[n - k])
+        d = a + (b - a) * (fib[n - k] / fib[n - k])
+        steps.append((a, b))
+        k += 1
+    
+    return (a + b) / 2, steps
+
+a = 1
+b = 11
+epsilon = 0.5
+
+n = 20  # Определено ранее в теоретической части
+
+xmin, steps = fibonacci_search(a, b, n)
+
+print(f"Точка минимума: {xmin}")
+print(f"Значение функции в точке минимума: {f(xmin)}")
+print(f"Конечный интервал: [{steps[-1][0]}, {steps[-1][1]}]")
+print("Метод сходится")
+
+# Построение графика
+x = np.linspace(a, b, 400)
+y = f(x)
+
+plt.plot(x, y, label='f(x)')
+plt.scatter(xmin, f(xmin), color='red', label='Minimum')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.title('Метод Фибоначчи')
+plt.grid(True)
+plt.show()
+
