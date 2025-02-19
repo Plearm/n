@@ -9,3 +9,125 @@ Console.WriteLine(client2);
 string json = "{\"Name\":\"ИП Васильев\",\"OwnershipType\":\"ИП\",\"Address\":\"Казань, ул. Советская, 3\",\"Phone\":\"+79998887766\",\"ContactPerson\":\"Василий\"}";
 Client client3 = new Client(json, true);
 Console.WriteLine(client3);
+
+
+
+
+
+using System;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+
+public class Client
+{
+    // Поля класса (инкапсулированы)
+    private string name;
+    private string ownershipType;
+    private string address;
+    private string phone;
+    private string contactPerson;
+
+    // Основной конструктор
+    public Client(string name, string ownershipType, string address, string phone, string contactPerson)
+    {
+        Validate(name, ownershipType, address, phone, contactPerson);
+        this.name = name;
+        this.ownershipType = ownershipType;
+        this.address = address;
+        this.phone = phone;
+        this.contactPerson = contactPerson;
+    }
+
+    // Перегруженный конструктор: строка (разделенная ;)
+    public Client(string data)
+    {
+        string[] parts = data.Split(';');
+        if (parts.Length != 5)
+        {
+            throw new ArgumentException("Некорректный формат строки. Должно быть 5 значений, разделенных ';'");
+        }
+
+        Validate(parts[0], parts[1], parts[2], parts[3], parts[4]);
+        this.name = parts[0];
+        this.ownershipType = parts[1];
+        this.address = parts[2];
+        this.phone = parts[3];
+        this.contactPerson = parts[4];
+    }
+
+    // Перегруженный конструктор: JSON
+    public Client(JsonElement json)
+    {
+        try
+        {
+            string name = json.GetProperty("name").GetString();
+            string ownershipType = json.GetProperty("ownershipType").GetString();
+            string address = json.GetProperty("address").GetString();
+            string phone = json.GetProperty("phone").GetString();
+            string contactPerson = json.GetProperty("contactPerson").GetString();
+
+            Validate(name, ownershipType, address, phone, contactPerson);
+
+            this.name = name;
+            this.ownershipType = ownershipType;
+            this.address = address;
+            this.phone = phone;
+            this.contactPerson = contactPerson;
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("Ошибка обработки JSON: " + ex.Message);
+        }
+    }
+
+    // 🔹 Общий метод валидации для всех полей
+    private static void Validate(string name, string ownershipType, string address, string phone, string contactPerson)
+    {
+        if (!ValidateName(name)) throw new ArgumentException("Ошибка: Название компании не должно быть пустым.");
+        if (!ValidateOwnershipType(ownershipType)) throw new ArgumentException("Ошибка: Вид собственности некорректен.");
+        if (!ValidateAddress(address)) throw new ArgumentException("Ошибка: Адрес не должен быть пустым.");
+        if (!ValidatePhone(phone)) throw new ArgumentException("Ошибка: Номер телефона должен быть в формате +7 (XXX) XXX-XX-XX.");
+        if (!ValidateContactPerson(contactPerson)) throw new ArgumentException("Ошибка: Контактное лицо не должно быть пустым.");
+    }
+
+    // 🔹 1. Проверка названия компании
+    private static bool ValidateName(string name)
+    {
+        return !string.IsNullOrWhiteSpace(name);
+    }
+
+    // 🔹 2. Проверка вида собственности
+    private static bool ValidateOwnershipType(string ownershipType)
+    {
+        string[] validTypes = { "ООО", "ИП", "ЗАО", "ОАО" };
+        return Array.Exists(validTypes, type => type == ownershipType);
+    }
+
+    // 🔹 3. Проверка адреса
+    private static bool ValidateAddress(string address)
+    {
+        return !string.IsNullOrWhiteSpace(address);
+    }
+
+    // 🔹 4. Проверка номера телефона (+7 (XXX) XXX-XX-XX)
+    private static bool ValidatePhone(string phone)
+    {
+        return Regex.IsMatch(phone, @"^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$");
+    }
+
+    // 🔹 5. Проверка контактного лица
+    private static bool ValidateContactPerson(string contactPerson)
+    {
+        return !string.IsNullOrWhiteSpace(contactPerson);
+    }
+
+    // Вывод информации
+    public void DisplayFullInfo()
+    {
+        Console.WriteLine($"Название: {name}");
+        Console.WriteLine($"Вид собственности: {ownershipType}");
+        Console.WriteLine($"Адрес: {address}");
+        Console.WriteLine($"Телефон: {phone}");
+        Console.WriteLine($"Контактное лицо: {contactPerson}");
+    }
+}
