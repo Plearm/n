@@ -25,7 +25,7 @@ public class Client
         get => _name;
         set => _name = value;
     }
-
+Проверка через Set не работает (как я понял)
     public string OwnershipType
     {
         get => _ownershipType;
@@ -56,3 +56,6 @@ public class Client
         Console.WriteLine($"Компания: {Name}\nФорма собственности: {OwnershipType}\nАдрес: {Address}\nТелефон: {Phone}\nКонтактное лицо: {ContactPerson}");
     }
 }
+
+
+Так же заменить DisplayInfo на соответствующий метод, который выводит на экран и так же проитать по нему информацию
