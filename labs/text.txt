@@ -1,0 +1,11 @@
+Для 6-го задания
+
+Client client1 = new Client("ООО Ромашка", "ООО", "Москва, ул. Ленина, 1", "+79123456789", "Иван Иванов");
+Console.WriteLine(client1);
+
+Client client2 = new Client("ЗАО Лилия;ЗАО;СПб, ул. Пушкина, 10;+79223334455;Петр Петров");
+Console.WriteLine(client2);
+
+string json = "{\"Name\":\"ИП Васильев\",\"OwnershipType\":\"ИП\",\"Address\":\"Казань, ул. Советская, 3\",\"Phone\":\"+79998887766\",\"ContactPerson\":\"Василий\"}";
+Client client3 = new Client(json, true);
+Console.WriteLine(client3);
