@@ -1,0 +1,23 @@
+1) Client (Клиенты)
+ID (PK)
+Name (Название компании)
+OwnershipType (Форма собственности)
+Address (Адрес)
+Phone (Телефон)
+ContactPerson (Контактное лицо)
+
+2) Loan (Кредиты)
+ID (PK)
+ClientID (FK → Client.ID)
+LoanTypeID (FK → LoanType.ID)
+Amount (Сумма кредита)
+IssueDate (Дата выдачи)
+
+3) LoanType (Типы кредитов)
+ID (PK)
+Name (Название типа кредита)
+InterestRate (Процентная ставка)
+TermMonths (Срок кредита в месяцах)
+
+
+Основной сущностью является Client, так как больше атрибутов
