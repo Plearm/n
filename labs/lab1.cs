@@ -2,7 +2,6 @@ using System;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-// Лабораторная #3 - Класс Client
 public class Client
 {
     private string _name;
@@ -54,8 +53,6 @@ public class Client
     }
 }
 
-// Лабораторная #6 - Перегрузка конструкторов
-// 🔹 **1. Обычный конструктор (ручной ввод данных)**
 public Client(string name, string ownershipType, string address, string phone, string contactPerson)
     {
         Name = name;
@@ -65,7 +62,6 @@ public Client(string name, string ownershipType, string address, string phone, s
         ContactPerson = contactPerson;
     }
 
-    // 🔹 **2. Конструктор из строки (CSV-формат)**
 public Client(string csvLine)
     {
         var parts = csvLine.Split(';');
@@ -78,7 +74,7 @@ public Client(string csvLine)
         ContactPerson = parts[4];
     }
 
-    // 🔹 **3. Конструктор из JSON (используем библиотеку Newtonsoft.Json)**
+    // библиотека Newtonsoft.Json
 public Client(string json, bool isJson)
     {
         if (!isJson) throw new ArgumentException("Для создания из JSON необходимо передать 'true' вторым аргументом.");
@@ -93,7 +89,6 @@ public Client(string json, bool isJson)
         ContactPerson = obj.ContactPerson;
     }
 
-// Лабораторная #7 - Оптимизация вывода данных
 public class ClientShort
 {
     public string Name { get; }
@@ -113,7 +108,6 @@ public class ClientShort
     }
 }
 
-// Лабораторная #8, #9 - Наследование и структуры данных
 public class BusinessClient : Client
 {
     public string INN { get; }
