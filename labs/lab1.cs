@@ -114,6 +114,13 @@ public class BusinessClient : Client
         INN = inn;
         OGRN = ogrn;
     }
+    public override bool Equals(object? obj)
+    {
+        if (!base.Equals(obj)) return false;
+        if (obj is not BusinessClient other) return false;
+
+        return INN == other.INN && OGRN == other.OGRN;
+    }
 
     public override string ToString()
     {
