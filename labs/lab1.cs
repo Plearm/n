@@ -2,7 +2,7 @@ using System;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-// Лабораторная #1 - Класс Client
+// Лабораторная #3 - Класс Client
 public class Client
 {
     private string _name;
@@ -43,7 +43,7 @@ public class Client
     }
 }
 
-// Лабораторная #3 - Перегрузка конструкторов
+// Лабораторная #6 - Перегрузка конструкторов
 // 🔹 **1. Обычный конструктор (ручной ввод данных)**
 public Client(string name, string ownershipType, string address, string phone, string contactPerson)
     {
@@ -82,10 +82,7 @@ public Client(string json, bool isJson)
         ContactPerson = obj.ContactPerson;
     }
 
-// Лабораторная #4 - Устранение дублирования кода
-// (Рефакторинг методов валидации в Validator)
-
-// Лабораторная #5 - Оптимизация вывода данных
+// Лабораторная #7 - Оптимизация вывода данных
 public class ClientShort
 {
     public string Name { get; }
@@ -99,13 +96,13 @@ public class ClientShort
         ContactPerson = client.ContactPerson;
     }
 
-    public void DisplayShortInfo()
+    public override string ToString()
     {
-        Console.WriteLine($"Компания: {Name}, Телефон: {Phone}, Контактное лицо: {ContactPerson}");
+        return $"Компания: {Name}, Телефон: {Phone}, Контактное лицо: {ContactPerson}";
     }
 }
 
-// Лабораторная #7, #8 - Наследование и структуры данных
+// Лабораторная #8, #9 - Наследование и структуры данных
 public class BusinessClient : Client
 {
     public string INN { get; }
@@ -118,10 +115,9 @@ public class BusinessClient : Client
         OGRN = ogrn;
     }
 
-    public override void DisplayFullInfo()
+    public override string ToString()
     {
-        base.DisplayFullInfo();
-        Console.WriteLine($"ИНН: {INN}\nОГРН: {OGRN}");
+        return base.ToString() + $"\nИНН: {INN}\nОГРН: {OGRN}";
     }
 }
 
