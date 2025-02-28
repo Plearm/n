@@ -138,19 +138,3 @@ public class BusinessClient : Client
         return base.ToString() + $"\nИНН: {INN}\nОГРН: {OGRN}";
     }
 }
-
-class Program
-{
-    static void Main()
-    {
-        // Тестирование
-        Client client = new Client("ООО Ромашка", "ООО", "Москва, ул. Ленина, д.1", "+71234567890", "Иван Иванов");
-        client.DisplayFullInfo();
-        
-        ClientShort shortClient = new ClientShort(client);
-        shortClient.DisplayShortInfo();
-
-        BusinessClient businessClient = new BusinessClient("ООО Лилия", "ООО", "СПб, ул. Кирова, д.5", "+79876543210", "Петр Петров", "1234567890", "0987654321");
-        businessClient.DisplayFullInfo();
-    }
-}
