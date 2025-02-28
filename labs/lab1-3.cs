@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 public class Client
 {
@@ -12,48 +13,73 @@ public class Client
     // Конструктор
     public Client(string name, string ownershipType, string address, string phone, string contactPerson)
     {
-        _name = name;
-        _ownershipType = ownershipType;
-        _address = address;
-        _phone = phone;
-        _contactPerson = contactPerson;
+        Name = name;  // Используем свойства, чтобы сразу проходила валидация
+        OwnershipType = ownershipType;
+        Address = address;
+        Phone = phone;
+        ContactPerson = contactPerson;
     }
 
-    // Свойства (геттеры и сеттеры)
-    public string Name 
+    // Свойства с валидацией через Validator
+    public string Name
     {
         get => _name;
-        set => _name = value;
+        set
+        {
+            if (!Validator.ValidateName(value))
+                throw new ArgumentException("Название компании не может быть пустым!");
+            _name = value;
+        }
     }
-Проверка через Set не работает (как я понял)
+
     public string OwnershipType
     {
         get => _ownershipType;
-        set => _ownershipType = value;
+        set
+        {
+            if (!Validator.ValidateOwnershipType(value))
+                throw new ArgumentException("Форма собственности не может быть пустой!");
+            _ownershipType = value;
+        }
     }
 
     public string Address
     {
         get => _address;
-        set => _address = value;
+        set
+        {
+            if (!Validator.ValidateAddress(value))
+                throw new ArgumentException("Адрес не может быть пустым!");
+            _address = value;
+        }
     }
 
     public string Phone
     {
         get => _phone;
-        set => _phone = value;
+        set
+        {
+            if (!Validator.ValidatePhone(value))
+                throw new ArgumentException("Телефон должен быть в формате +7XXXXXXXXXX!");
+            _phone = value;
+        }
     }
 
     public string ContactPerson
     {
         get => _contactPerson;
-        set => _contactPerson = value;
+        set
+        {
+            if (!Validator.ValidateContactPerson(value))
+                throw new ArgumentException("Контактное лицо не может быть пустым!");
+            _contactPerson = value;
+        }
     }
 
     // Метод для отображения полной информации о клиенте
-    public void DisplayInfo()
+    public override string ToString()
     {
-        Console.WriteLine($"Компания: {Name}\nФорма собственности: {OwnershipType}\nАдрес: {Address}\nТелефон: {Phone}\nКонтактное лицо: {ContactPerson}");
+    return $"Компания: {Name}\nФорма собственности: {OwnershipType}\nАдрес: {Address}\nТелефон: {Phone}\nКонтактное лицо: {ContactPerson}";
     }
 }
 
