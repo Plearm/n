@@ -24,6 +24,17 @@ public class Client
         _address = address;
         _phone = phone;
         _contactPerson = contactPerson;
+        
+        public override bool Equals(object? obj)
+        {
+            if (obj is not Client other) return false;
+
+            return Name == other.Name &&
+                   OwnershipType == other.OwnershipType &&
+                   Address == other.Address &&
+                   Phone == other.Phone &&
+                   ContactPerson == other.ContactPerson;
+        }
     }
 
     public string Name => _name;
