@@ -37,6 +37,7 @@ public class Client
         this.phone = parts[3];
         this.contactPerson = parts[4];
     }
+    
 
     public Client(JsonElement json)
     {
