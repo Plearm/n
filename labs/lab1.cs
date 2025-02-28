@@ -43,16 +43,6 @@ public class Client
     }
 }
 
-// Лабораторная #2 - Класс Validator
-public static class Validator
-{
-    public static bool ValidateName(string name) => !string.IsNullOrWhiteSpace(name);
-    public static bool ValidateOwnershipType(string ownershipType) => !string.IsNullOrWhiteSpace(ownershipType);
-    public static bool ValidateAddress(string address) => !string.IsNullOrWhiteSpace(address);
-    public static bool ValidatePhone(string phone) => Regex.IsMatch(phone, @"^\+7\d{10}$");
-    public static bool ValidateContactPerson(string contactPerson) => !string.IsNullOrWhiteSpace(contactPerson);
-}
-
 // Лабораторная #3 - Перегрузка конструкторов
 // 🔹 **1. Обычный конструктор (ручной ввод данных)**
 public Client(string name, string ownershipType, string address, string phone, string contactPerson)
