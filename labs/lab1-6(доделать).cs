@@ -66,12 +66,8 @@ public class Client
         }
     }
 
-    public void DisplayFullInfo()
+    public override string ToString()
     {
-        Console.WriteLine($"Название: {name}");
-        Console.WriteLine($"Вид собственности: {ownershipType}");
-        Console.WriteLine($"Адрес: {address}");
-        Console.WriteLine($"Телефон: {phone}");
-        Console.WriteLine($"Контактное лицо: {contactPerson}");
+        return $"Название: {name}\nВид собственности: {ownershipType}\nАдрес: {address}\nТелефон: {phone}\nКонтактное лицо: {contactPerson}";
     }
 }
