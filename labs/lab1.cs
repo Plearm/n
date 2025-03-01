@@ -32,6 +32,12 @@ public class Client
         var parts = csvLine.Split(';');
         if (parts.Length != 5) throw new ArgumentException("Некорректный формат строки. Ожидается 5 параметров.");
 
+        if (!Validator.ValidateName(parts[0])) throw new ArgumentException("Некорректное название компании");
+        if (!Validator.ValidateOwnershipType(parts[1])) throw new ArgumentException("Некорректная форма собственности");
+        if (!Validator.ValidateAddress(parts[2])) throw new ArgumentException("Некорректный адрес");
+        if (!Validator.ValidatePhone(parts[3])) throw new ArgumentException("Некорректный номер телефона");
+        if (!Validator.ValidateContactPerson(parts[4])) throw new ArgumentException("Некорректное контактное лицо");
+        
         _name = parts[0];
         _ownershipType = parts[1];
         _address = parts[2];
@@ -189,13 +195,22 @@ class Program
 {
     static void Main()
     {
-        Client client = new Client("ООО Ромашка", "ООО", "Москва", "+71234567890", "Матемрл Попрлр");
+        Client client1 = new Client("ООО Ромашка", "ООО", "Москва", "+71234567890", "Матемрл Попрлр");
         Console.WriteLine(client);
 
-        ClientShort shortClient = new ClientShort(client);
+        Client client2 = new Client("ООО Лилия;ООО;СПб; +79876543210;Петр Петров");
+        
+        string json = "{ \"Name\": \"ООО Лилия\", \"OwnershipType\": \"ООО\", \"Address\": \"СПб\", \"Phone\": \"+79876543210\", \"ContactPerson\": \"Петр Петров\" }";
+        Client client3 = new Client(json, true);
+
+        Client client4 = new Client("ООО Ромашка", "ООО", "Москва", "+71234567890", "Иван Иванов");
+        Client client5 = new Client("ООО Ромашка", "ООО", "Москва", "+71234567890", "Иван Иванов");
+        Console.WriteLine(client4.Equals(client5));
+        
+        ClientShort shortClient1 = new ClientShort(client);
         Console.WriteLine(shortClient);
 
-        BusinessClient businessClient = new BusinessClient("ООО Лилия", "ООО", "СПб", "+79876543210", "Максим Лаптев", "1234567890", "0987654321");
+        BusinessClient businessClient1 = new BusinessClient("ООО Лилия", "ООО", "СПб", "+79876543210", "Максим Лаптев", "1234567890", "0987654321");
         Console.WriteLine(businessClient);
     }
 }
