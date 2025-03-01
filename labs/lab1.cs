@@ -50,6 +50,12 @@ public class Client
     {
         if (!isJson) throw new ArgumentException("Для создания из JSON необходимо передать 'true' вторым аргументом.");
 
+        if (!Validator.ValidateName(obj.Name)) throw new ArgumentException("Некорректное название компании");
+        if (!Validator.ValidateOwnershipType(obj.OwnershipType)) throw new ArgumentException("Некорректная форма собственности");
+        if (!Validator.ValidateAddress(obj.Address)) throw new ArgumentException("Некорректный адрес");
+        if (!Validator.ValidatePhone(obj.Phone)) throw new ArgumentException("Некорректный номер телефона");
+        if (!Validator.ValidateContactPerson(obj.ContactPerson)) throw new ArgumentException("Некорректное контактное лицо");
+        
         var obj = JsonSerializer.Deserialize<Client>(json);
         if (obj == null) throw new ArgumentException("Ошибка десериализации JSON.");
 
