@@ -10,6 +10,7 @@ public class Client
     private string _phone;
     private string _contactPerson;
 
+    
     public Client(string name, string ownershipType, string address, string phone, string contactPerson)
     {
         if (!Validator.ValidateName(name)) throw new ArgumentException("Некорректное название компании");
@@ -23,71 +24,120 @@ public class Client
         _address = address;
         _phone = phone;
         _contactPerson = contactPerson;
-        
-        public override bool Equals(object? obj)
-        {
-            if (obj is not Client other) return false;
+    }
 
-            return Name == other.Name &&
-                   OwnershipType == other.OwnershipType &&
-                   Address == other.Address &&
-                   Phone == other.Phone &&
-                   ContactPerson == other.ContactPerson;
+    
+    public Client(string csvLine)
+    {
+        var parts = csvLine.Split(';');
+        if (parts.Length != 5) throw new ArgumentException("Некорректный формат строки. Ожидается 5 параметров.");
+
+        _name = parts[0];
+        _ownershipType = parts[1];
+        _address = parts[2];
+        _phone = parts[3];
+        _contactPerson = parts[4];
+    }
+
+    
+    public Client(string json, bool isJson)
+    {
+        if (!isJson) throw new ArgumentException("Для создания из JSON необходимо передать 'true' вторым аргументом.");
+
+        var obj = JsonSerializer.Deserialize<Client>(json);
+        if (obj == null) throw new ArgumentException("Ошибка десериализации JSON.");
+
+        _name = obj.Name;
+        _ownershipType = obj.OwnershipType;
+        _address = obj.Address;
+        _phone = obj.Phone;
+        _contactPerson = obj.ContactPerson;
+    }
+
+    
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (!Validator.ValidateName(value))
+                throw new ArgumentException("Название компании не может быть пустым!");
+            _name = value;
         }
     }
 
-    public string Name => _name;
-    public string OwnershipType => _ownershipType;
-    public string Address => _address;
-    public string Phone => _phone;
-    public string ContactPerson => _contactPerson;
-
-    public void DisplayFullInfo()
+    public string OwnershipType
     {
-        Console.WriteLine($"Название: {_name}\nВид собственности: {_ownershipType}\nАдрес: {_address}\nТелефон: {_phone}\nКонтактное лицо: {_contactPerson}");
+        get => _ownershipType;
+        set
+        {
+            if (!Validator.ValidateOwnershipType(value))
+                throw new ArgumentException("Форма собственности не может быть пустой!");
+            _ownershipType = value;
+        }
     }
 
+    public string Address
+    {
+        get => _address;
+        set
+        {
+            if (!Validator.ValidateAddress(value))
+                throw new ArgumentException("Адрес не может быть пустым!");
+            _address = value;
+        }
+    }
+
+    public string Phone
+    {
+        get => _phone;
+        set
+        {
+            if (!Validator.ValidatePhone(value))
+                throw new ArgumentException("Телефон должен быть в формате +7XXXXXXXXXX!");
+            _phone = value;
+        }
+    }
+
+    public string ContactPerson
+    {
+        get => _contactPerson;
+        set
+        {
+            if (!Validator.ValidateContactPerson(value))
+                throw new ArgumentException("Контактное лицо не может быть пустым!");
+            _contactPerson = value;
+        }
+    }
+
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Client other) return false;
+        return Name == other.Name &&
+               OwnershipType == other.OwnershipType &&
+               Address == other.Address &&
+               Phone == other.Phone &&
+               ContactPerson == other.ContactPerson;
+    }
+
+    
     public override string ToString()
     {
         return $"Компания: {_name}, Телефон: {_phone}, Контактное лицо: {_contactPerson}";
     }
 }
 
-public Client(string name, string ownershipType, string address, string phone, string contactPerson)
-    {
-        Name = name;
-        OwnershipType = ownershipType;
-        Address = address;
-        Phone = phone;
-        ContactPerson = contactPerson;
-    }
 
-public Client(string csvLine)
-    {
-        var parts = csvLine.Split(';');
-        if (parts.Length != 5) throw new ArgumentException("Некорректный формат строки. Ожидается 5 параметров.");
+public static class Validator
+{
+    public static bool ValidateName(string name) => !string.IsNullOrWhiteSpace(name);
+    public static bool ValidateOwnershipType(string ownershipType) => !string.IsNullOrWhiteSpace(ownershipType);
+    public static bool ValidateAddress(string address) => !string.IsNullOrWhiteSpace(address);
+    public static bool ValidatePhone(string phone) => Regex.IsMatch(phone, @"^\+7\d{10}$");
+    public static bool ValidateContactPerson(string contactPerson) => !string.IsNullOrWhiteSpace(contactPerson);
+}
 
-        Name = parts[0];
-        OwnershipType = parts[1];
-        Address = parts[2];
-        Phone = parts[3];
-        ContactPerson = parts[4];
-    }
-
-    // библиотека Newtonsoft.Json
-public Client(string json, bool isJson)
-    {
-        if (!isJson) throw new ArgumentException("Для создания из JSON необходимо передать 'true' вторым аргументом.");
-
-        var obj = JsonConvert.DeserializeObject<Client>(json);
-        if (obj == null) throw new ArgumentException("Ошибка десериализации JSON.");
-
-        Name = obj.Name;
-        OwnershipType = obj.OwnershipType;
-        Address = obj.Address;
-        Phone = obj.Phone;
-        ContactPerson = obj.ContactPerson;
-    }
 
 public class ClientShort
 {
@@ -108,6 +158,7 @@ public class ClientShort
     }
 }
 
+
 public class BusinessClient : Client
 {
     public string INN { get; }
@@ -119,16 +170,32 @@ public class BusinessClient : Client
         INN = inn;
         OGRN = ogrn;
     }
+
     public override bool Equals(object? obj)
     {
         if (!base.Equals(obj)) return false;
         if (obj is not BusinessClient other) return false;
-
         return INN == other.INN && OGRN == other.OGRN;
     }
 
     public override string ToString()
     {
-        return base.ToString() + $"\nИНН: {INN}\nОГРН: {OGRN}";
+        return base.ToString() + $"\nИНН: {INN}, ОГРН: {OGRN}";
+    }
+}
+
+
+class Program
+{
+    static void Main()
+    {
+        Client client = new Client("ООО Ромашка", "ООО", "Москва", "+71234567890", "Матемрл Попрлр");
+        Console.WriteLine(client);
+
+        ClientShort shortClient = new ClientShort(client);
+        Console.WriteLine(shortClient);
+
+        BusinessClient businessClient = new BusinessClient("ООО Лилия", "ООО", "СПб", "+79876543210", "Максим Лаптев", "1234567890", "0987654321");
+        Console.WriteLine(businessClient);
     }
 }
