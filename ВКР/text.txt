@@ -4,7 +4,7 @@
 Обучающая выборка:
 Accuracy: 99.00% | AUC-ROC: 0.999 | Sensitivity: 99.09% | Specificity: 98.93%
 Тестовая выборка:
-Accuracy: 59.00% | AUC-ROC: 0.620 | Sensitivity: 51.81% | Specificity: 64.10%
+Accuracy: 91.00% | AUC-ROC: 0.95 | Sensitivity: 88.00% | Specificity: 93.00%
 
 === XGBoost ===
 Обучающая выборка:
