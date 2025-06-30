@@ -1,1 +1,31 @@
+Результаты обучения:
 
+=== RandomForest ===
+Обучающая выборка:
+Accuracy: 99.00% | AUC-ROC: 0.999 | Sensitivity: 99.09% | Specificity: 98.93%
+Тестовая выборка:
+Accuracy: 59.00% | AUC-ROC: 0.620 | Sensitivity: 51.81% | Specificity: 64.10%
+
+=== XGBoost ===
+Обучающая выборка:
+Accuracy: 100.00% | AUC-ROC: 1.000 | Sensitivity: 100.00% | Specificity: 100.00%
+Тестовая выборка:
+Accuracy: 59.50% | AUC-ROC: 0.612 | Sensitivity: 53.01% | Specificity: 64.10%
+
+=== LogisticRegression ===
+Обучающая выборка:
+Accuracy: 57.25% | AUC-ROC: 0.616 | Sensitivity: 52.87% | Specificity: 60.34%
+Тестовая выборка:
+Accuracy: 55.50% | AUC-ROC: 0.591 | Sensitivity: 59.04% | Specificity: 52.99%
+
+=== SVM ===
+Обучающая выборка:
+Accuracy: 69.62% | AUC-ROC: 0.773 | Sensitivity: 69.18% | Specificity: 69.94%
+Тестовая выборка:
+Accuracy: 56.50% | AUC-ROC: 0.595 | Sensitivity: 51.81% | Specificity: 59.83%
+
+=== NeuralNetwork ===
+Обучающая выборка:
+Accuracy: 66.00% | AUC-ROC: 0.740 | Sensitivity: 68.28% | Specificity: 64.39%
+Тестовая выборка:
+Accuracy: 54.00% | AUC-ROC: 0.593 | Sensitivity: 55.42% | Specificity: 52.99%
